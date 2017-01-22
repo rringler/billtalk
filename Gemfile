@@ -7,6 +7,7 @@ gem 'puma',                     '~> 3.0'
 gem 'active_model_serializers', '~> 0.10.0'
 
 group :development, :test do
+  gem 'annotate'
   gem 'listen',             '~> 3.1.5'
   gem 'rspec-rails',        '>= 3.5.2'
   gem 'capybara'
