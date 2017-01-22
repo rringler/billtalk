@@ -69,6 +69,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
+    ffaker (2.4.0)
     ffi (1.9.17)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -181,6 +182,7 @@ DEPENDENCIES
   annotate
   capybara
   factory_girl_rails
+  ffaker
   listen (~> 3.1.5)
   pg
   pry-byebug

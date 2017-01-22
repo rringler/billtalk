@@ -8,6 +8,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 
 group :development, :test do
   gem 'annotate'
+  gem 'ffaker'
   gem 'listen',             '~> 3.1.5'
   gem 'rspec-rails',        '>= 3.5.2'
   gem 'capybara'
