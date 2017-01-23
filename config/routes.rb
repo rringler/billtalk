@@ -1,3 +1,10 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :states
+  constraints subdomain: 'api' do
+    namespace :v1 do
+      resources :states
+      resources :elections, only: [:create, :update, :show, :destroy]
+      resources :measures,  only: [:create, :update, :show, :destroy]
+    end
+  end
 end
