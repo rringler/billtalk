@@ -12,8 +12,7 @@
 class User < ApplicationRecord
   has_secure_password
 
-  has_many :comments,
-    as: :commentable
+  has_many :comments
 
   validates :email,
     presence:   true,

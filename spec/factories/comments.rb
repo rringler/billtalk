@@ -26,7 +26,7 @@ FactoryGirl.define do
       association :commentable, factory: :measure
 
       measure_start { 0 }
-      measure_end   { commentable.text.size - 1}
+      measure_end   { commentable.text.split(' ').size - 1 }
     end
 
     factory :comment_comment do

@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  resources :comments
   constraints subdomain: 'api' do
     namespace :v1 do
       resources :states
       resources :elections, only: [:create, :update, :show, :destroy]
       resources :measures,  only: [:create, :update, :show, :destroy]
+      resources :comments,  only: [:create, :update, :show, :destroy]
 
       resources :users
 
