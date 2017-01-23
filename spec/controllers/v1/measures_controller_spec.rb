@@ -4,29 +4,37 @@ RSpec.describe V1::MeasuresController, type: :controller do
   describe '#create' do
     let(:election)      { FactoryGirl.create(:election) }
     let(:measure_attrs) { FactoryGirl.attributes_for(:measure).merge(election_id: election.id) }
-    let(:params)        { { params: { measure: measure_attrs } } }
+    let(:params)        { { measure: measure_attrs } }
 
-    subject { post(:create, params) }
+    subject { post(:create, params: params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'returns the serialized measure' do
-      expect { subject }.to change { Measure.count }.by(1)
+      it { is_expected.to have_http_status(:ok) }
 
-      created_measure = Measure.last
-      created_attrs   = created_measure.attributes.with_indifferent_access
+      it 'returns the serialized measure' do
+        expect { subject }.to change { Measure.count }.by(1)
 
-      expect(created_attrs).to include(measure_attrs)
+        created_measure = Measure.last
+        created_attrs   = created_measure.attributes.with_indifferent_access
+
+        expect(created_attrs).to include(measure_attrs)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 
   describe '#show' do
     let!(:measure)     { FactoryGirl.create(:measure) }
-    let(:params)       { { params: { id: measure.id } } }
+    let(:params)       { { id: measure.id } }
     let(:json)         { JSON.parse(subject.body) }
     let(:json_data_id) { json['data']['id']}
 
-    subject { get(:show, params) }
+    subject { get(:show, params: params) }
 
     it { is_expected.to have_http_status(:ok) }
 
@@ -39,29 +47,45 @@ RSpec.describe V1::MeasuresController, type: :controller do
 
   describe '#update' do
     let!(:measure) { FactoryGirl.create(:measure, :failed) }
-    let(:params)   { { params: { id: measure.id, measure: { result: true } } } }
+    let(:params)   { { id: measure.id, measure: { result: true } } }
 
-    subject { post(:update, params) }
+    subject { post(:update, params: params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'updates the correct measure' do
-      expect { subject }.to change {
-        measure.reload.result
-      }.from(false).to(true)
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'updates the correct measure' do
+        expect { subject }.to change {
+          measure.reload.result
+        }.from(false).to(true)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 
   describe '#destroy' do
     let!(:measure) { FactoryGirl.create(:measure, :failed) }
-    let(:params)   { { params: { id: measure.id } } }
+    let(:params)   { { id: measure.id } }
 
-    subject { post(:destroy, params) }
+    subject { post(:destroy, params: params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'destroys the measure record' do
-      expect { subject }.to change { Measure.count }.by(-1)
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'destroys the measure record' do
+        expect { subject }.to change { Measure.count }.by(-1)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 end

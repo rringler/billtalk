@@ -1,4 +1,6 @@
-class V1::StatesController < ApplicationController
+class V1::StatesController < V1::BaseController
+  skip_before_action :authenticate_user, only: :show
+
   def create
     render(json: State.create!(state_params))
   end

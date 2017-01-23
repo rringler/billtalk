@@ -5,6 +5,7 @@ gem 'rails',                    '~> 5.0.1'
 gem 'pg'
 gem 'puma',                     '~> 3.0'
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'knock'
 
 group :development, :test do
   gem 'annotate'

@@ -7,15 +7,23 @@ RSpec.describe V1::StatesController, type: :controller do
 
     subject { post(:create, params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'returns the serialized state' do
-      expect { subject }.to change { State.count }.by(1)
+      it { is_expected.to have_http_status(:ok) }
 
-      created_state = State.last
-      created_attrs = created_state.attributes.with_indifferent_access
+      it 'returns the serialized state' do
+        expect { subject }.to change { State.count }.by(1)
 
-      expect(created_attrs).to include(state_attrs)
+        created_state = State.last
+        created_attrs = created_state.attributes.with_indifferent_access
+
+        expect(created_attrs).to include(state_attrs)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 
@@ -40,12 +48,20 @@ RSpec.describe V1::StatesController, type: :controller do
 
     subject { post(:update, params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'updates the correct measure' do
-      expect { subject }.to change {
-        state.reload.code
-      }.from('CA').to('NV')
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'updates the correct measure' do
+        expect { subject }.to change {
+          state.reload.code
+        }.from('CA').to('NV')
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 
@@ -55,10 +71,18 @@ RSpec.describe V1::StatesController, type: :controller do
 
     subject { post(:destroy, params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'destroys the state record' do
-      expect { subject }.to change { State.count }.by(-1)
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'destroys the state record' do
+        expect { subject }.to change { State.count }.by(-1)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 end

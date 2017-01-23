@@ -4,19 +4,27 @@ RSpec.describe V1::ElectionsController, type: :controller do
   describe '#create' do
     let!(:state)         { FactoryGirl.create(:state) }
     let(:election_attrs) { FactoryGirl.attributes_for(:election).merge(state_id: state.id) }
-    let(:params)         { { params: { election: election_attrs } } }
+    let(:params)         { { election: election_attrs } }
 
-    subject { post(:create, params) }
+    subject { post(:create, params: params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'returns the serialized election' do
-      expect { subject }.to change { Election.count }.by(1)
+      it { is_expected.to have_http_status(:ok) }
 
-      created_election = Election.last
-      created_attrs   = created_election.attributes.with_indifferent_access
+      it 'returns the serialized election' do
+        expect { subject }.to change { Election.count }.by(1)
 
-      expect(created_attrs).to include(election_attrs)
+        created_election = Election.last
+        created_attrs   = created_election.attributes.with_indifferent_access
+
+        expect(created_attrs).to include(election_attrs)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 
@@ -39,29 +47,44 @@ RSpec.describe V1::ElectionsController, type: :controller do
     let!(:current_date) { Time.zone.now.change(usec: 0) }
     let!(:future_date)  { current_date + 1.day }
     let!(:election)     { FactoryGirl.create(:election, date: current_date) }
-    let(:params)        { { params: { id: election.id, election: { date: future_date } } } }
+    let(:params)        { { id: election.id, election: { date: future_date } } }
 
-    subject { post(:update, params) }
+    subject { post(:update, params: params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
+      it { is_expected.to have_http_status(:ok) }
 
-    it 'updates the correct measure' do
-      expect { subject }.to change {
-        election.reload.date
-      }.from(current_date).to(future_date)
+      it 'updates the correct measure' do
+        expect { subject }.to change {
+          election.reload.date
+        }.from(current_date).to(future_date)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 
   describe '#destroy' do
     let!(:election) { FactoryGirl.create(:election) }
-    let(:params)    { { params: { id: election.id } } }
+    let(:params)    { { id: election.id } }
 
-    subject { post(:destroy, params) }
+    subject { post(:destroy, params: params) }
 
-    it { is_expected.to have_http_status(:ok) }
+    context 'when authenticated' do
+      include_context 'with authentication token'
 
-    it 'destroys the election record' do
-      expect { subject }.to change { Election.count }.by(-1)
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'destroys the election record' do
+        expect { subject }.to change { Election.count }.by(-1)
+      end
+    end
+
+    context 'when not authenticated' do
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 end

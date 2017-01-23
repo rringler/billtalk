@@ -1,4 +1,6 @@
-class V1::ElectionsController < ApplicationController
+class V1::ElectionsController < V1::BaseController
+  skip_before_action :authenticate_user, only: :show
+
   def create
     render(json: Election.create!(election_params))
   end

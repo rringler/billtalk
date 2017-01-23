@@ -20,7 +20,7 @@ FactoryGirl.define do
   factory :measure do
     election
 
-    sequence(:title) { |n| "Proposition #{sprintf('%02d', n)}" }
+    sequence(:title) { |n| "Proposition #{n.to_s.rjust(2, '0')}" }
     description      { FFaker::Lorem.sentence }
     text             { FFaker::Lorem.paragraph }
 

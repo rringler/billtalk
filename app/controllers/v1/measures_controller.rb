@@ -1,4 +1,6 @@
-class V1::MeasuresController < ApplicationController
+class V1::MeasuresController < V1::BaseController
+  skip_before_action :authenticate_user, only: :show
+
   def create
     render(json: Measure.create!(measure_params))
   end
