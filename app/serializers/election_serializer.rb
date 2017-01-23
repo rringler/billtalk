@@ -3,6 +3,5 @@ class ElectionSerializer < ActiveModel::Serializer
     :date
 
   belongs_to :state
-
-  has_many :measures
+  has_many   :measures
 end

@@ -2,8 +2,7 @@ require 'rails_helper'
 
 RSpec.describe V1::ElectionsController, type: :controller do
   describe '#create' do
-    let!(:state)         { FactoryGirl.create(:state) }
-    let(:election_attrs) { FactoryGirl.attributes_for(:election).merge(state_id: state.id) }
+    let(:election_attrs) { FactoryGirl.attributes_for(:election) }
     let(:params)         { { election: election_attrs } }
 
     subject { post(:create, params: params) }

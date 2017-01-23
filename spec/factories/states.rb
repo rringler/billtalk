@@ -10,7 +10,9 @@
 
 FactoryGirl.define do
   factory :state do
-    code 'CA'
+    skip_create
+
+    initialize_with { State.random }
 
     transient do
       election_count 0

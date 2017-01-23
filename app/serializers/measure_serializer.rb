@@ -5,5 +5,6 @@ class MeasureSerializer < ActiveModel::Serializer
     :text,
     :result
 
-  belongs_to :election_id
+  belongs_to :election
+  has_many   :comments
 end

@@ -15,4 +15,8 @@ class State < ApplicationRecord
   validates :code,
     presence:   true,
     uniqueness: true
+
+  def self.random
+    order("RANDOM()").first
+  end
 end

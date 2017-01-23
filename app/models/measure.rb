@@ -20,6 +20,9 @@ class Measure < ApplicationRecord
   belongs_to :election,
     required: true
 
+  has_many :comments,
+    as: :commentable
+
   validates :election,
     presence: true
 

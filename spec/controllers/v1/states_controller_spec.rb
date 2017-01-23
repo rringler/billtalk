@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe V1::StatesController, type: :controller do
   describe '#create' do
-    let(:state_attrs) { FactoryGirl.attributes_for(:state) }
+    let(:state_attrs) { { code: 'MX' } } # Non-existent state code
     let(:params)      { { params: { state: state_attrs } } }
 
     subject { post(:create, params) }
@@ -28,7 +28,7 @@ RSpec.describe V1::StatesController, type: :controller do
   end
 
   describe '#show' do
-    let!(:state)       { FactoryGirl.create(:state) }
+    let(:state)        { State.random }
     let(:params)       { { params: { id: state.id } } }
     let(:json)         { JSON.parse(subject.body) }
     let(:json_data_id) { json['data']['id']}
@@ -43,8 +43,8 @@ RSpec.describe V1::StatesController, type: :controller do
   end
 
   describe '#update' do
-    let!(:state) { FactoryGirl.create(:state, code: 'CA') }
-    let(:params) { { params: { id: state.id, state: { code: 'NV' } } } }
+    let!(:state) { State.find_by(code: 'CA') }
+    let(:params) { { params: { id: state.id, state: { code: 'MX' } } } }
 
     subject { post(:update, params) }
 
@@ -56,7 +56,7 @@ RSpec.describe V1::StatesController, type: :controller do
       it 'updates the correct measure' do
         expect { subject }.to change {
           state.reload.code
-        }.from('CA').to('NV')
+        }.from('CA').to('MX')
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe V1::StatesController, type: :controller do
   end
 
   describe '#destroy' do
-    let!(:state) { FactoryGirl.create(:state) }
+    let!(:state) { FactoryGirl.create(:state, code: 'MX') }
     let(:params) { { params: { id: state.id } } }
 
     subject { post(:destroy, params) }

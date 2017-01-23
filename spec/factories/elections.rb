@@ -16,9 +16,8 @@
 
 FactoryGirl.define do
   factory :election do
-    state
-
-    date { Date.today }
+    state_id { State.random.id }
+    date     { Date.today }
 
     transient do
       measure_count 0
