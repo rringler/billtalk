@@ -6,6 +6,7 @@ gem 'pg'
 gem 'puma',                     '~> 3.0'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'knock'
+gem 'rack-cors'
 
 group :development, :test do
   gem 'annotate'
