@@ -17,8 +17,17 @@
 !/log/.keep
 !/tmp/.keep
 
-# Ignoring system files
-.DS_Store
-
 # Ignore Byebug command history file.
 .byebug_history
+
+# Frontend Dependencies
+/client/build
+/client/node_modules
+/client/proc
+/client/root
+/client/sys
+
+# Misc
+.DS_Store
+.env
+npm-debug.log

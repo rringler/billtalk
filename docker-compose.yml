@@ -1,19 +1,40 @@
 version: '2'
+
 services:
-  web:
-    build: .
-    cpu_shares: 10
+  nginx:
+    image: bitnami/nginx:1.10.2-r4
+    volumes:
+      - ./config/nginx:/bitnami/nginx/conf/vhosts
     depends_on:
-      - database
-    labels:
-      - convox.port.443.protocol=tls
-      - convox.port.443.proxy=true
+      - rails
+      - react
+    environment:
+      - VIRTUAL_HOST=billtalk.docker
+      - VIRTUAL_PORT=8080
+    ports:
+      - 8080:8080
+  rails:
+    build: .
+    command: rails s --binding=0.0.0.0
+    entrypoint: ./scripts/entrypoint.sh
     links:
       - database
-    mem_limit: 512MB
+      - react
+    volumes:
+      - ./:/app
+    depends_on:
+      - database
+      - react
+  react:
+    build: ./client
+    command: npm start
+    entrypoint: ./scripts/entrypoint.sh
+    volumes:
+      - ./client:/app
+    environment:
+      NODE_ENV: development
     ports:
-      - 80:4000
-      - 443:4001
+      - 3000:3000
   database:
     image: convox/postgres
     labels:
