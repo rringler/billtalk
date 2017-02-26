@@ -31,3 +31,5 @@ group :test do
   gem 'database_cleaner', '~> 1.5.3'
   gem 'timecop'
 end
+
+gem 'mini_racer', platforms: :ruby
