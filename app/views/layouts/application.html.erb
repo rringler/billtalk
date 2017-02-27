@@ -4,7 +4,10 @@
     <title>Billtalk</title>
     <%= csrf_meta_tags %>
 
+    <% bootstrap_url = 'https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css' %>
+
     <%= stylesheet_link_tag    'application',       'data-turbolinks-track': 'reload', media: 'all' %>
+    <%= stylesheet_link_tag    bootstrap_url,       'data-turbolinks-track': 'reload', media: 'all' %>
     <%= stylesheet_link_tag    '/packs/styles.css', 'data-turbolinks-track': 'reload', media: 'all' %>
     <%= javascript_include_tag 'application',       'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag    'client' %>
