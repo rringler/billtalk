@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
       resources :users
 
-      post 'user_token' => 'v1/user_token#create'
+      resource :session, only: [:create]
     end
   end
 end
