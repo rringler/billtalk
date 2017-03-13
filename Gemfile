@@ -22,15 +22,17 @@ group :development, :test do
   gem 'ffaker'
   gem 'listen',             '~> 3.1.5'
   gem 'rspec-rails',        '>= 3.5.2'
-  gem 'capybara'
   gem 'shoulda-matchers'
   gem 'factory_girl_rails'
   gem 'pry-byebug'
 end
 
 group :test do
+  gem 'capybara'
   gem 'database_cleaner', '~> 1.5.3'
   gem 'timecop'
+  gem 'selenium-webdriver'
+  gem 'chromedriver-helper'
 end
 
 gem 'mini_racer', platforms: :ruby
