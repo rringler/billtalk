@@ -7,9 +7,17 @@ import LoggedInMenuItems from './LoggedInMenuItems';
 import LoggedOutMenuItems from './LoggedOutMenuItems';
 
 class Header extends Component {
-  render() {
+  renderConditionalMenuItems = (eventKey) => {
     const { authToken } = this.props;
 
+    if (authToken) {
+      return (<LoggedInMenuItems eventKey={eventKey} />);
+    } else {
+      return (<LoggedOutMenuItems eventKey={eventKey}/>);
+    }
+  }
+
+  render() {
     return (
       <Navbar inverse collapseOnSelect fixedTop>
         <Navbar.Header>
@@ -23,7 +31,7 @@ class Header extends Component {
             <LinkContainer to="/about">
               <NavItem eventKey={1}>About</NavItem>
             </LinkContainer>
-            {authToken ? <LoggedInMenuItems eventKey={2} /> : <LoggedOutMenuItems eventKey={2}/>}
+            {this.renderConditionalMenuItems(2)}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

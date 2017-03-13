@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import Header from '../../containers/Header';
+import Header from '../Header';
 import './style.scss';
 
-export default class App extends Component {
+export default class Layout extends Component {
   render() {
     return (
       <div>
         <Header />
 
-        <div className="content">
+        <div className='layout'>
           {this.props.children}
         </div>
       </div>

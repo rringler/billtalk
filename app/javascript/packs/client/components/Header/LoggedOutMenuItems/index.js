@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import LoginCompact from '../../../components/LoginCompact';
-import NavbarDropdownForm from '../../../components/NavbarDropdownForm';
+import LoginCompact from './LoginCompact';
+import NavbarDropdownForm from './NavbarDropdownForm';
 
 export default class LoggedOutMenuItems extends Component {
   render() {

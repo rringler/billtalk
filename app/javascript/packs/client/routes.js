@@ -1,16 +1,16 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 
-import App      from './components/App';
 import About    from './components/About';
-import Home     from './components/Home';
+import Layout   from './components/Layout';
 import LogIn    from './components/LogIn';
 import NotFound from './components/NotFound';
 import Register from './components/Register';
+import Root     from './components/Root';
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRoute             component={Home} />
+  <Route path="/"           component={Layout}>
+    <IndexRoute             component={Root} />
     <Route path="/about"    component={About} />
     <Route path="/login"    component={LogIn} />
     <Route path="/register" component={Register} />

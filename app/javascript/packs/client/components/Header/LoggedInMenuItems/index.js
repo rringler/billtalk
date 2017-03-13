@@ -8,7 +8,7 @@ export default class LoggedInMenuItem extends Component {
 
     return (
       <Nav>
-        <LinkContainer to="/logout">
+        <LinkContainer to='/logout'>
           <NavItem eventKey={eventKey}>Logout</NavItem>
         </LinkContainer>
       </Nav>

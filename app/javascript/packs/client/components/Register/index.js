@@ -4,22 +4,7 @@ import { Button, Col, ControlLabel, Form, FormGroup } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/user_registration';
-
-const required = (value) => {
-  return value ? undefined : 'Required';
-}
-
-const checked = (value) => {
-  return value ? undefined: 'Checked';
-}
-
-const email = (value) => {
-  const email_regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-  return (
-    value && (!email_regex.test(value) ? 'Invalid email address' : undefined)
-  );
-}
+import { checked, email, required } from '../validations';
 
 const FIELDS = {
   email: {

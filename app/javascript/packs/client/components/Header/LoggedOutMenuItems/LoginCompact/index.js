@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button, FormControl, FormGroup, Navbar } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/session';
+import { loginUser } from '../../../../actions/session';
 
 const required = (value) => {
   return value ? undefined : 'Required';
