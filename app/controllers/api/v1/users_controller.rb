@@ -10,11 +10,11 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def update
-    render(json: user.update!(user_params))
+    render(json: user.tap { |u| u.update!(user_params) })
   end
 
   def destroy
-    render(json: user.destroy!)
+    render(json: user.tap { |u| u.destroy! })
   end
 
   private

@@ -10,11 +10,11 @@ class Api::V1::ElectionsController < Api::V1::BaseController
   end
 
   def update
-    render(json: election.update!(election_params))
+    render(json: election.tap { |e| e.update!(election_params) })
   end
 
   def destroy
-    render(json: election.destroy!)
+    render(json: election.tap { |e| e.destroy! })
   end
 
   private

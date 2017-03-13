@@ -10,11 +10,11 @@ class Api::V1::StatesController < Api::V1::BaseController
   end
 
   def update
-    render(json: state.update!(state_params))
+    render(json: state.tap { |s| s.update!(state_params) })
   end
 
   def destroy
-    render(json: state.destroy!)
+    render(json: state.tap { |s| s.destroy! })
   end
 
   private

@@ -1,102 +1,144 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController, type: :controller do
-  describe '#create' do
-    let(:user_attrs)      { FactoryGirl.attributes_for(:user) }
-    let(:params)          { { user: user_attrs } }
-    let(:json)            { JSON.parse(response.body) }
-    let(:json_data_attrs) { json['data']['attributes'] }
+  describe '#create', authenticated: false do
+    let(:params) { {} }
+    let(:json)   { JSON.parse(subject.body, symbolize_names: true) }
 
     subject { post(:create, params: params) }
 
-    it 'returns a successful status code' do
-      is_expected.to have_http_status(:ok)
+    context 'when successful' do
+      let(:user_attrs) { FactoryGirl.attributes_for(:user) }
+      let(:params)     { { user: user_attrs } }
+
+      it 'returns a successful status code' do
+        is_expected.to have_http_status(:ok)
+      end
+
+      it 'creates a new user with the correct attributes' do
+        expect { subject }.to change { User.count }.by(1)
+
+        created_user  = User.last
+        created_attrs = created_user.attributes.with_indifferent_access
+
+        expect(created_attrs).to include(user_attrs.slice(:email))
+      end
+
+      it 'returns a proper JSON response' do
+        Timecop.freeze do
+          expect(json.dig(:data, :attributes)).to eq(
+            email: User.last.email,
+            token: User.last.send(:generate_token)
+          )
+        end
+      end
     end
 
-    it 'creates a new user with the correct attributes' do
-      expect { subject }.to change { User.count }.by(1)
+    context 'when unsuccessful' do
+      let!(:existing_user) { FactoryGirl.create(:user) }
+      let(:existing_email) { existing_user.email }
+      let(:user_attrs)     { FactoryGirl.attributes_for(:user, email: existing_email) }
+      let(:params)         { { user: user_attrs } }
 
-      created_user  = User.last
-      created_attrs = created_user.attributes.with_indifferent_access
+      it 'returns an :unprocessable_entity status code' do
+        is_expected.to have_http_status(:unprocessable_entity)
+      end
 
-      expect(created_attrs).to include(user_attrs.slice(:email))
-    end
-
-    it 'returns the serialized user' do
-      Timecop.freeze do
-        subject
-
-        user       = User.last
-        user_attrs = {
-          'email' => user.email,
-          'token' => user.send(:generate_token)
-        }
-
-        expect(json_data_attrs).to eq(user_attrs)
+      it 'returns a proper JSON response' do
+        expect(json[:errors]).to contain_exactly(
+          status: 422,
+          title:  'Validation Failed',
+          detail: 'Email has already been taken'
+        )
       end
     end
   end
 
-  describe '#show' do
-    let(:user)       { FactoryGirl.create(:user) }
-    let(:params)     { { id: user.id } }
-    let(:json)       { JSON.parse(subject.body) }
-    let(:json_id)    { json['data']['id'] }
-    let(:json_attrs) { json['data']['attributes'] }
+  describe '#show', authenticated: false do
+    let(:params) { { id: -1 } }
+    let(:json)   { JSON.parse(subject.body, symbolize_names: true) }
 
     subject { get(:show, params: params) }
 
-    it 'returns the serialized user' do
-      expect(response).to have_http_status(:ok)
+    context 'when the requested user exists' do
+      let(:user)   { FactoryGirl.create(:user) }
+      let(:params) { { id: user.id } }
 
-      expect(json_id).to    eq(user.id.to_s)
-      expect(json_attrs).to eq('email' => user.email)
-    end
-  end
+      it 'returns a :successful status code' do
+        is_expected.to have_http_status(:ok)
+      end
 
-  describe '#update' do
-    let(:user)          { FactoryGirl.create(:user) }
-    let(:current_email) { user.email }
-    let(:new_email)     { "new_#{current_email}" }
-    let(:params)        { { id: user.id, user: { email: new_email } } }
-
-    subject { post(:update, params: params) }
-
-    context 'when authenticated' do
-      include_context 'with authentication token'
-
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'updates the correct measure' do
-        expect { subject }.to change {
-          user.reload.email
-        }.from(current_email).to(new_email)
+      it 'returns a proper JSON response' do
+        expect(json.dig(:data, :id)).to         eq(user.id.to_s)
+        expect(json.dig(:data, :attributes)).to eq(email: user.email)
       end
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
+    context 'when the requested user does not exists' do
+      let(:params) { { id: -1 } }
+
+      it 'returns a :not_found status code' do
+        is_expected.to have_http_status(:not_found)
+      end
+
+      it 'returns a proper JSON response' do
+        expect(json.dig(:errors)).to contain_exactly(
+          status: 404,
+          title:  'Not Found',
+          detail: 'The requested resource could not be found'
+        )
+      end
     end
   end
 
-  describe '#destroy' do
+  describe '#update', authenticated: true do
+    let(:user)      { FactoryGirl.create(:user) }
+    let(:email)     { user.email }
+    let(:new_email) { "new_#{email}" }
+    let(:params)    { { id: user.id, user: { email: new_email } } }
+    let(:json)      { JSON.parse(subject.body, symbolize_names: true) }
+
+    subject { post(:update, params: params) }
+
+    context 'when successful' do
+      it 'returns a successful status code' do
+        is_expected.to have_http_status(:ok)
+      end
+
+      it 'updates the user' do
+        expect { subject }.to change {
+          user.reload.email
+        }.from(email).to(new_email)
+      end
+
+      it 'returns a proper JSON response' do
+        expect(json.dig(:data, :attributes)).to eq(
+          email: new_email
+        )
+      end
+    end
+  end
+
+  describe '#destroy', authenticated: true do
     let(:user)   { FactoryGirl.create(:user) }
     let(:params) { { id: user.id } }
+    let(:json)   { JSON.parse(subject.body, symbolize_names: true) }
 
     subject { post(:destroy, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
-
-      it { is_expected.to have_http_status(:ok) }
+    context 'when successful' do
+      it 'returns a successful status code' do
+        is_expected.to have_http_status(:ok)
+      end
 
       it 'destroys the user record' do
         expect { subject }.to change { User.count }.by(-1)
       end
-    end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
+      it 'returns a proper JSON response' do
+        expect(json.dig(:data, :id)).to         eq(user.id.to_s)
+        expect(json.dig(:data, :attributes)).to eq(email: user.email)
+      end
     end
   end
 end

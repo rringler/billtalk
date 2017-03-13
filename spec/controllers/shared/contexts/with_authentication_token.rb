@@ -16,5 +16,5 @@ RSpec.shared_context 'with authentication token', shared_context: :metadata do
 end
 
 RSpec.configure do |rspec|
-  rspec.include_context 'with authentication token', include_shared: true
+  rspec.include_context 'with authentication token', authenticated: true
 end

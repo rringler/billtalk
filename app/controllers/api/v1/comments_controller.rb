@@ -10,11 +10,11 @@ class Api::V1::CommentsController < Api::V1::BaseController
   end
 
   def update
-    render(json: comment.update!(comment_params))
+    render(json: comment.tap { |c| c.update!(comment_params) })
   end
 
   def destroy
-    render(json: comment.destroy!)
+    render(json: comment.tap { |c| c.destroy! })
   end
 
   private

@@ -10,11 +10,11 @@ class Api::V1::MeasuresController < Api::V1::BaseController
   end
 
   def update
-    render(json: measure.update!(measure_params))
+    render(json: measure.tap { |m| m.update!(measure_params) })
   end
 
   def destroy
-    render(json: measure.destroy!)
+    render(json: measure.tap { |m| m.destroy! })
   end
 
   private
