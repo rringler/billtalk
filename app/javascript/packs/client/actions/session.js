@@ -2,10 +2,12 @@ import axios from 'axios';
 import { LOGIN_USER, LOGOUT_USER } from './types';
 
 export function loginUser({ email, password }) {
-  const URL = '/api/v1/session';
+  const URL = '/api/v1/sessions';
   const request = axios.post(URL, {
-    email:    email,
-    password: password
+    auth: {
+      email:    email,
+      password: password
+    }
   });
 
   return {

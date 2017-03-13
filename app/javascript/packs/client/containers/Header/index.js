@@ -3,7 +3,8 @@ import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import LoginDropdown from './LoginDropdown'
+import LoggedInMenuItems from './LoggedInMenuItems';
+import LoggedOutMenuItems from './LoggedOutMenuItems';
 
 class Header extends Component {
   render() {
@@ -22,19 +23,7 @@ class Header extends Component {
             <LinkContainer to="/about">
               <NavItem eventKey={1}>About</NavItem>
             </LinkContainer>
-            {authToken &&
-              <LinkContainer to="/logout">
-                <NavItem eventKey={2}>Logout</NavItem>
-              </LinkContainer>
-            }
-            {!authToken &&
-              <LoginDropdown />
-            }
-            {!authToken &&
-              <LinkContainer to="/register">
-                <NavItem eventKey={3}>Register</NavItem>
-              </LinkContainer>
-            }
+            {authToken ? <LoggedInMenuItems eventKey={2} /> : <LoggedOutMenuItems eventKey={2}/>}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

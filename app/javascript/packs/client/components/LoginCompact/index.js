@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { Button, Col, ControlLabel, Form, FormGroup } from 'react-bootstrap';
+import { Button, FormControl, FormGroup, Navbar } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/session';
@@ -19,52 +19,46 @@ const email = (value) => {
 
 const FIELDS = {
   email: {
-    label:       'Email',
+    placeholder: 'Email',
     type:        'email',
     validations: [ required, email ]
 
   },
   password: {
-    label:       'Password',
+    placeholder: 'Password',
     type:        'password',
     validations: [ required ]
   }
 };
 
-class Login extends Component {
+class LoginCompact extends Component {
   static contextTypes = {
     router: PropTypes.object
   };
 
   onSubmit = (data) => {
-    this.props.loginUser(data)
-      .then((response) => {
-        if ((response.status === 200 ) {
-          this.context.router.push('/');
-        } else {
-          this.props.alert = response.body.errors;
-        }
-      });
+    this.props.loginUser(data);
   }
 
-  renderField = ({ label, type, validations }, field) => {
+  renderField = ({ placeholder, type, validations }, field) => {
     return (
       <Field name={field}
              id={field}
-             label={label}
+             placeholder={placeholder}
              component={this.renderInput}
              type={type}
              validate={validations} />
     );
   }
 
-  renderInput = ({ input, label, type, meta }) => {
+  renderInput = ({ input, placeholder, type, meta }) => {
     const validationState = this.validationState(meta);
 
     return (
       <FormGroup validationState={validationState}>
-        <ControlLabel>{label}</ControlLabel>
-        <input {...input} className='form-control' type={type} />
+        <input {...input} className='form-control'
+                          placeholder={placeholder}
+                          type={type} />
       </FormGroup>
     );
   }
@@ -79,30 +73,23 @@ class Login extends Component {
     const { handleSubmit, submitting } = this.props;
 
     return (
-      <div>
-        <h1>Log in</h1>
+      <Navbar.Form id='login-compact' onSubmit={this.onFormSubmit}>
+        {_.map(FIELDS, this.renderField)}
 
-        <Col sm={4} smOffset={4}>
-          <Form id='login'
-                onSubmit={handleSubmit(this.onSubmit)}>
-            {_.map(FIELDS, this.renderField)}
-
-            <FormGroup>
-              <Button bsStyle="primary"
-                      type="submit"
-                      disabled={submitting}>
-                Submit
-              </Button>
-            </FormGroup>
-          </Form>
-        </Col>
-      </div>
+        <FormGroup>
+          <Button type='submit'
+                  bsStyle='primary'
+                  disable={submitting}>
+            Submit
+          </Button>
+        </FormGroup>
+      </Navbar.Form>
     );
   }
 }
 
-const LoginForm = reduxForm({
-  form: 'LoginForm'
-})(Login);
+const LoginCompactForm = reduxForm({
+  form: 'LoginCompactForm'
+})(LoginCompact);
 
-export default connect(null, { loginUser })(LoginForm);
+export default connect(null, { loginUser })(LoginCompactForm);

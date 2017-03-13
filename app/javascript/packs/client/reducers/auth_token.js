@@ -14,7 +14,7 @@ export default function(state = null, action) {
   case LOGOUT_USER:
     return _.omit(state, 'auth_token')
   case REGISTER_USER:
-    return { ...state, auth_token: action.payload.data.attributes.token }
+    return { ...state, auth_token: action.payload.data.data.attributes.token }
   default:
     return state
   }
