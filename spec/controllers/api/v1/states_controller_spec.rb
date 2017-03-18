@@ -1,15 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::StatesController, type: :controller do
-  describe '#create' do
+  describe '#index', authenticated: false do
+    let(:json)       { JSON.parse(subject.body, symbolize_names: true) }
+    let(:json_data)  { json[:data] }
+    let(:json_codes) { json_data.map { |json| json.dig(:attributes, :code) } }
+
+    subject { get(:index) }
+
+    it { is_expected.to have_http_status(:ok) }
+
+    it 'returns the serialized states' do
+      expect(json_codes).to contain_exactly(*State::CODES)
+    end
+  end
+
+  describe '#create', authenticated: true do
     let(:state_attrs) { { code: 'MX' } } # Non-existent state code
     let(:params)      { { params: { state: state_attrs } } }
 
     subject { post(:create, params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
-
+    context 'when successful' do
       it { is_expected.to have_http_status(:ok) }
 
       it 'returns the serialized state' do
@@ -21,36 +33,30 @@ RSpec.describe Api::V1::StatesController, type: :controller do
         expect(created_attrs).to include(state_attrs)
       end
     end
-
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
   end
 
-  describe '#show' do
+  describe '#show', authenticated: false do
     let(:state)        { State.random }
     let(:params)       { { params: { id: state.id } } }
-    let(:json)         { JSON.parse(subject.body) }
-    let(:json_data_id) { json['data']['id']}
+    let(:json)         { JSON.parse(subject.body, symbolize_names: true) }
+    let(:json_data_id) { json.dig(:data, :id) }
 
     subject { get(:show, params) }
 
-    it 'returns the serialized state' do
-      expect(response).to have_http_status(:ok)
+    it { is_expected.to have_http_status(:ok) }
 
+    it 'returns the serialized state' do
       expect(json_data_id).to eq(state.id.to_s)
     end
   end
 
-  describe '#update' do
+  describe '#update', authenticated: true do
     let!(:state) { State.find_by(code: 'CA') }
     let(:params) { { params: { id: state.id, state: { code: 'MX' } } } }
 
     subject { post(:update, params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
-
+    context 'when successful' do
       it { is_expected.to have_http_status(:ok) }
 
       it 'updates the correct measure' do
@@ -59,30 +65,20 @@ RSpec.describe Api::V1::StatesController, type: :controller do
         }.from('CA').to('MX')
       end
     end
-
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
   end
 
-  describe '#destroy' do
+  describe '#destroy', authenticated: true do
     let!(:state) { FactoryGirl.create(:state, code: 'MX') }
     let(:params) { { params: { id: state.id } } }
 
     subject { post(:destroy, params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
-
+    context 'when successful' do
       it { is_expected.to have_http_status(:ok) }
 
       it 'destroys the state record' do
         expect { subject }.to change { State.count }.by(-1)
       end
-    end
-
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 end

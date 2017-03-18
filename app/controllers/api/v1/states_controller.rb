@@ -1,5 +1,9 @@
 class Api::V1::StatesController < Api::V1::BaseController
-  skip_before_action :authenticate_user, only: :show
+  skip_before_action :authenticate_user, only: [:index, :show]
+
+  def index
+    render(json: states)
+  end
 
   def create
     render(json: State.create!(state_params))
@@ -21,6 +25,10 @@ class Api::V1::StatesController < Api::V1::BaseController
 
   def state
     @state ||= State.find(params[:id])
+  end
+
+  def states
+    @states ||= State.all
   end
 
   def state_params
