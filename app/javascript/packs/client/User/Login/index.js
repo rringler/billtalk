@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { Alert, Button, Col, ControlLabel, Form, FormGroup } from 'react-bootstrap';
+import { Alert, Button, Col, ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
+import ClosableAlert from 'packs/client/Lib/ClosableAlert';
 import { connect } from 'react-redux';
 import { loginUser } from './actions';
 import { email, required } from 'packs/client/validations';
@@ -11,7 +12,6 @@ const FIELDS = {
     label:       'Email',
     type:        'email',
     validations: [ required, email ]
-
   },
   password: {
     label:       'Password',
@@ -24,14 +24,6 @@ class Login extends Component {
   static contextTypes = {
     router: PropTypes.object
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      alertDismissed: false
-    };
-  }
 
   onSubmit = (data) => {
     return this.props.loginUser(data).then(
@@ -48,16 +40,13 @@ class Login extends Component {
     throw new SubmissionError({ _error: 'Login failed.' })
   }
 
-  renderAlert = (error) => {
-    if (!this.state.alertDismissed) {
-      return (
-        <Alert bsStyle="danger"
-               onDismiss={() => { this.setState({ alertDismissed: true }); }}>
-          <strong>Login failed.</strong>
-          <p>Please double check your email and password.</p>
-        </Alert>
-      );
-    }
+  renderAlert = () => {
+    return (
+      <ClosableAlert bsStyle='danger'>
+        <strong>Login failed.</strong>
+        <p>Please double check your email and password.</p>
+      </ClosableAlert>
+    );
   }
 
   renderField = ({ label, type, validations }, field) => {
@@ -76,8 +65,12 @@ class Login extends Component {
 
     return (
       <FormGroup validationState={validationState}>
-        <ControlLabel>{label}</ControlLabel>
-        <input {...input} className='form-control' type={type} />
+        <ControlLabel>
+          {label}
+        </ControlLabel>
+        <input {...input} className='form-control'
+                          type={type} />
+        <FormControl.Feedback />
       </FormGroup>
     );
   }
@@ -92,26 +85,25 @@ class Login extends Component {
     const { error, handleSubmit, submitting } = this.props;
 
     return (
-      <div>
+      <Col sm={4} smOffset={4}>
         <h1>Log in</h1>
 
-        <Col sm={4} smOffset={4}>
-          {error && this.renderAlert(error)}
+        {error && this.renderAlert()}
 
-          <Form id='login'
-                onSubmit={handleSubmit(this.onSubmit)}>
-            {_.map(FIELDS, this.renderField)}
+        <Form id='login'
+              onSubmit={handleSubmit(this.onSubmit)}>
 
-            <FormGroup>
-              <Button bsStyle="primary"
-                      type="submit"
-                      disabled={submitting}>
-                Submit
-              </Button>
-            </FormGroup>
-          </Form>
-        </Col>
-      </div>
+          {_.map(FIELDS, this.renderField)}
+
+          <FormGroup>
+            <Button bsStyle='primary'
+                    type='submit'
+                    disabled={submitting}>
+              Submit
+            </Button>
+          </FormGroup>
+        </Form>
+      </Col>
     );
   }
 }

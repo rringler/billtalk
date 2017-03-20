@@ -1,17 +1,18 @@
 import _ from 'lodash';
-import React, { Component, PropTypes } from 'react';
-import { Button, FormControl, FormGroup, Navbar } from 'react-bootstrap';
-import { Field, reduxForm } from 'redux-form';
+import React, { Component } from 'react';
+import { Button, Col, Form, FormControl, FormGroup } from 'react-bootstrap';
+import { reduxForm, Field, SubmissionError } from 'redux-form';
+import ClosableAlert from 'packs/client/Lib/ClosableAlert';
 import { connect } from 'react-redux';
 import { loginUser } from 'packs/client/User/Login/actions';
 import { email, required } from 'packs/client/validations';
+import './style.scss';
 
 const FIELDS = {
   email: {
     placeholder: 'Email',
     type:        'email',
     validations: [ required, email ]
-
   },
   password: {
     placeholder: 'Password',
@@ -21,12 +22,27 @@ const FIELDS = {
 };
 
 class LoginCompact extends Component {
-  static contextTypes = {
-    router: PropTypes.object
-  };
-
   onSubmit = (data) => {
-    this.props.loginUser(data);
+    return this.props.loginUser(data).then(
+      null,
+      this.onSubmitFail
+    );
+  }
+
+  onSubmitFail = () => {
+    throw new SubmissionError({
+      email:    'error',
+      password: 'error',
+      _error:   'error'
+    })
+  }
+
+  renderAlert = () => {
+    return (
+      <ClosableAlert bsStyle='danger'>
+        <p>Login failed.</p>
+      </ClosableAlert>
+    );
   }
 
   renderField = ({ placeholder, type, validations }, field) => {
@@ -48,6 +64,7 @@ class LoginCompact extends Component {
         <input {...input} className='form-control'
                           placeholder={placeholder}
                           type={type} />
+        <FormControl.Feedback />
       </FormGroup>
     );
   }
@@ -59,20 +76,24 @@ class LoginCompact extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props;
+    const { error, handleSubmit, submitting } = this.props;
 
     return (
-      <Navbar.Form id='login-compact' onSubmit={this.onFormSubmit}>
+      <Form id='login-compact'
+            className='pull-right'
+            onSubmit={handleSubmit(this.onSubmit)}>
+
         {_.map(FIELDS, this.renderField)}
 
         <FormGroup>
-          <Button type='submit'
-                  bsStyle='primary'
+          <Button bsStyle='primary'
+                  type='submit'
                   disabled={submitting}>
             Submit
           </Button>
+          {error && <p id='fail-message'>Login failed</p>}
         </FormGroup>
-      </Navbar.Form>
+      </Form>
     );
   }
 }

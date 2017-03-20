@@ -5,27 +5,27 @@ export default class NavbarDropdownForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { _open: false };
+    this.state = { open: false };
   }
 
   onDropdownToggle = (newState, _, { source }) => {
     if (!newState && source === 'rootClose') {
-      this.setState({ _open: false });
+      this.setState({ open: false });
     }
     else {
-      this.setState({ _open: true });
+      this.setState({ open: true });
     }
   }
 
   render() {
     const { eventKey, id, title } = this.props;
-    const { _open }               = this.state;
+    const { open }                = this.state;
 
     return (
       <NavDropdown eventKey={eventKey}
                    title={title}
                    id={id}
-                   open={_open}
+                   open={open}
                    onToggle={this.onDropdownToggle}>
         {this.props.children}
       </NavDropdown>

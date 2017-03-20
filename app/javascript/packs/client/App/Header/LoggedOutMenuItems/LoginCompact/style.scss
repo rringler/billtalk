@@ -1,0 +1,10 @@
+form#login-compact {
+  min-width: 200px;
+  margin: 20px 20px 0 20px;
+
+  p#fail-message {
+    color: rgb(169, 68, 66);
+    display: inline-block;
+    padding-left: 10px;
+  }
+}
