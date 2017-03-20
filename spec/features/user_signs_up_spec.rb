@@ -27,7 +27,7 @@ RSpec.describe 'signing up', type: :feature do
 
     before { expect(User.count).to eq(1) }
 
-    it 'creates a new User' do
+    it 'does not create a new User' do
       visit '/signup'
 
       within('div.content') do
