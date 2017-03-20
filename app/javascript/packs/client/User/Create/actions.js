@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { REGISTER_USER } from './types';
+import { CREATE_USER } from 'packs/client/types';
 
-export function registerUser({ email, password, tos }) {
-  const URL = '/api/v1/users';
-  const request = axios.post(URL, {
+export function createUser({ email, password, tos }) {
+  const url = '/api/v1/users';
+  const request = axios.post(url, {
     user: {
       email:                 email,
       password:              password,
@@ -13,7 +13,7 @@ export function registerUser({ email, password, tos }) {
   });
 
   return {
-    type:    REGISTER_USER,
+    type:    CREATE_USER,
     payload: request
   };
 }

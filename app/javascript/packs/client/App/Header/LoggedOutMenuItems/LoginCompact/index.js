@@ -3,19 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { Button, FormControl, FormGroup, Navbar } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { loginUser } from '../../../../actions/session';
-
-const required = (value) => {
-  return value ? undefined : 'Required';
-}
-
-const email = (value) => {
-  const email_regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-  return (
-    value && (!email_regex.test(value) ? 'Invalid email address' : undefined)
-  );
-}
+import { loginUser } from 'packs/client/User/Login/actions';
+import { email, required } from 'packs/client/validations';
 
 const FIELDS = {
   email: {
@@ -79,7 +68,7 @@ class LoginCompact extends Component {
         <FormGroup>
           <Button type='submit'
                   bsStyle='primary'
-                  disable={submitting}>
+                  disabled={submitting}>
             Submit
           </Button>
         </FormGroup>

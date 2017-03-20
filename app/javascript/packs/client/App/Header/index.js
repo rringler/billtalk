@@ -13,7 +13,7 @@ class Header extends Component {
     if (authToken) {
       return (<LoggedInMenuItems eventKey={eventKey} />);
     } else {
-      return (<LoggedOutMenuItems eventKey={eventKey}/>);
+      return (<LoggedOutMenuItems eventKey={eventKey} />);
     }
   }
 

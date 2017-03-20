@@ -1,19 +1,21 @@
 import React from 'react';
 import { IndexRoute, Route } from 'react-router';
 
-import About    from './components/About';
-import Layout   from './components/Layout';
-import LogIn    from './components/LogIn';
-import NotFound from './components/NotFound';
-import Register from './components/Register';
-import Root     from './components/Root';
+import App          from './App';
+import AboutPage    from './Pages/About';
+import NotFoundPage from './Pages/NotFound';
+import RootPage     from './Pages/Root';
+import CreateUser   from './User/Create';
+import LoginUser    from './User/Login';
+import LogoutUser   from './User/Logout';
 
 export default (
-  <Route path="/"           component={Layout}>
-    <IndexRoute             component={Root} />
-    <Route path="/about"    component={About} />
-    <Route path="/login"    component={LogIn} />
-    <Route path="/register" component={Register} />
-    <Route path="*"         component={NotFound} />
+  <Route path="/"         component={App}>
+    <IndexRoute           component={RootPage} />
+    <Route path="/about"  component={AboutPage} />
+    <Route path="/login"  component={LoginUser} />
+    <Route path="/logout" component={LogoutUser} />
+    <Route path="/signup" component={CreateUser} />
+    <Route path="*"       component={NotFoundPage} />
   </Route>
 );

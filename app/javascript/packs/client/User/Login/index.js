@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { Button, Col, ControlLabel, Form, FormGroup } from 'react-bootstrap';
-import { Field, reduxForm } from 'redux-form';
+import { Alert, Button, Col, ControlLabel, Form, FormGroup } from 'react-bootstrap';
+import { reduxForm, Field, SubmissionError } from 'redux-form';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/session';
-import { required, email } from '../validations';
+import { loginUser } from './actions';
+import { email, required } from 'packs/client/validations';
 
 const FIELDS = {
   email: {
@@ -25,15 +25,39 @@ class Login extends Component {
     router: PropTypes.object
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      alertDismissed: false
+    };
+  }
+
   onSubmit = (data) => {
-    this.props.loginUser(data)
-      .then((response) => {
-        if (response.status === 200 ) {
-          this.context.router.push('/');
-        } else {
-          this.props.alert = response.body.errors;
-        }
-      });
+    return this.props.loginUser(data).then(
+      this.onSubmitSuccess,
+      this.onSubmitFail
+    );
+  }
+
+  onSubmitSuccess = () => {
+    this.context.router.push('/');
+  }
+
+  onSubmitFail = () => {
+    throw new SubmissionError({ _error: 'Login failed.' })
+  }
+
+  renderAlert = (error) => {
+    if (!this.state.alertDismissed) {
+      return (
+        <Alert bsStyle="danger"
+               onDismiss={() => { this.setState({ alertDismissed: true }); }}>
+          <strong>Login failed.</strong>
+          <p>Please double check your email and password.</p>
+        </Alert>
+      );
+    }
   }
 
   renderField = ({ label, type, validations }, field) => {
@@ -65,13 +89,15 @@ class Login extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props;
+    const { error, handleSubmit, submitting } = this.props;
 
     return (
       <div>
         <h1>Log in</h1>
 
         <Col sm={4} smOffset={4}>
+          {error && this.renderAlert(error)}
+
           <Form id='login'
                 onSubmit={handleSubmit(this.onSubmit)}>
             {_.map(FIELDS, this.renderField)}

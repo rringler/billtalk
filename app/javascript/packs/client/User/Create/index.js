@@ -3,8 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Col, ControlLabel, Form, FormGroup } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { registerUser } from '../../actions/user_registration';
-import { checked, email, required } from '../validations';
+import { createUser } from './actions';
+import { checked, email, required } from 'packs/client/validations';
 
 const FIELDS = {
   email: {
@@ -30,7 +30,7 @@ class SignUp extends Component {
   };
 
   onSubmit = (data) => {
-    this.props.registerUser(data)
+    this.props.createUser(data)
       .then(() => { this.context.router.push('/'); });
   }
 
@@ -86,7 +86,9 @@ class SignUp extends Component {
       <Col sm={6} smOffset={3}>
         <h1>Sign up</h1>
 
-        <Form onSubmit={handleSubmit(data => this.onSubmit(data))}>
+        <Form className='create-user-form'
+              onSubmit={handleSubmit(data => this.onSubmit(data))}>
+
           {_.map(FIELDS, this.renderField)}
 
           <FormGroup>
@@ -106,5 +108,5 @@ const SignUpForm = reduxForm({
   form: 'SignUpForm'
 })(SignUp);
 
-export default connect(null, { registerUser })(SignUpForm);
+export default connect(null, { createUser })(SignUpForm);
 

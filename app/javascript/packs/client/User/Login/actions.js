@@ -1,21 +1,19 @@
 import axios from 'axios';
-import { LOGIN_USER, LOGOUT_USER } from './types';
+import { LOGIN_USER } from 'packs/client/types';
 
 export function loginUser({ email, password }) {
-  const URL = '/api/v1/sessions';
-  const request = axios.post(URL, {
+  const url  = '/api/v1/sessions';
+  const body = {
     auth: {
       email:    email,
       password: password
     }
-  });
+  };
+
+  const request = axios.post(url, body);
 
   return {
     type:    LOGIN_USER,
     payload: request
   };
-}
-
-export function logoutUser() {
-  return { type: LOGOUT_USER };
 }

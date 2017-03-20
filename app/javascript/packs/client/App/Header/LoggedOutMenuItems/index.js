@@ -13,8 +13,8 @@ export default class LoggedOutMenuItems extends Component {
         <NavbarDropdownForm eventKey={eventKey} title='Login'>
           <LoginCompact />
         </NavbarDropdownForm>
-        <LinkContainer to="/register">
-          <NavItem eventKey={eventKey + 1}>Register</NavItem>
+        <LinkContainer to="/signup">
+          <NavItem eventKey={eventKey + 1}>Sign up</NavItem>
         </LinkContainer>
       </Nav>
     );
