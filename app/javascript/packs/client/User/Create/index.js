@@ -84,7 +84,7 @@ class SignUp extends Component {
 
     return (
       <Col sm={6} smOffset={3}>
-        <h1>Sign up</h1>
+        <h1>Join the conversation</h1>
 
         <Form className='create-user-form'
               onSubmit={handleSubmit(data => this.onSubmit(data))}>
