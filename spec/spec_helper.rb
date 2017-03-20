@@ -63,11 +63,12 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = :random
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+  # Set cleaning strategy based on spec type
+  config.before(:all) do
+    feature_spec = self.class.metadata[:type] == :feature
+    strategy     = feature_spec ? :truncation : :transaction
 
-    Rails.application.load_seed
+    DatabaseCleaner.strategy = strategy
   end
 
   config.before(:each) { DatabaseCleaner.start }
