@@ -7,17 +7,14 @@
 #  date       :datetime         not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#
-# Indexes
-#
-#  index_elections_on_date      (date)
-#  index_elections_on_state_id  (state_id)
+#  name       :string           not null
 #
 
 FactoryGirl.define do
   factory :election do
     state_id { State.random.id }
     date     { Date.today }
+    name     { FFaker::Lorem.sentence }
 
     transient do
       measure_count 0

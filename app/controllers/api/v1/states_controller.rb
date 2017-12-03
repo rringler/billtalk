@@ -10,7 +10,7 @@ class Api::V1::StatesController < Api::V1::BaseController
   end
 
   def show
-    render(json: state)
+    render(json: state, include: :elections)
   end
 
   def update
@@ -32,8 +32,9 @@ class Api::V1::StatesController < Api::V1::BaseController
   end
 
   def state_params
-    @state_params ||= params.require(:state).permit(
-      :code
+    params.require(:state).permit(
+      :code,
+      :name
     )
   end
 end

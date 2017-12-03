@@ -24,7 +24,7 @@ class Api::V1::MeasuresController < Api::V1::BaseController
   end
 
   def measure_params
-    @measure_params ||= params.require(:measure).permit(
+    params.require(:measure).permit(
       :election_id,
       :title,
       :description,

@@ -7,11 +7,7 @@
 #  date       :datetime         not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#
-# Indexes
-#
-#  index_elections_on_date      (date)
-#  index_elections_on_state_id  (state_id)
+#  name       :string           not null
 #
 
 class Election < ApplicationRecord
@@ -22,5 +18,8 @@ class Election < ApplicationRecord
     inverse_of: :election
 
   validates :date,
+    presence: true
+
+  validates :name,
     presence: true
 end

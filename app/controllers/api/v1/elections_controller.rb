@@ -6,7 +6,7 @@ class Api::V1::ElectionsController < Api::V1::BaseController
   end
 
   def show
-    render(json: election)
+    render(json: election, include: :measures)
   end
 
   def update
@@ -24,7 +24,7 @@ class Api::V1::ElectionsController < Api::V1::BaseController
   end
 
   def election_params
-    @election_params ||= params.require(:election).permit(
+    params.require(:election).permit(
       :state_id,
       :date
     )

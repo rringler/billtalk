@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: elections
+#
+#  id         :integer          not null, primary key
+#  state_id   :integer          not null
+#  date       :datetime         not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  name       :string           not null
+#
+
 require 'rails_helper'
 
 RSpec.describe ElectionSerializer, type: :serializer do

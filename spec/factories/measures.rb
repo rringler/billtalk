@@ -11,10 +11,6 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-# Indexes
-#
-#  index_measures_on_election_id  (election_id)
-#
 
 FactoryGirl.define do
   factory :measure do
