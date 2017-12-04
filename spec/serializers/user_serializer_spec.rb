@@ -13,7 +13,7 @@ require 'rails_helper'
 
 RSpec.describe UserSerializer, type: :serializer do
   describe "attributes" do
-    let(:user) { FactoryGirl.create(:user, comment_count: 3) }
+    let(:user) { FactoryBot.create(:user, comment_count: 3) }
     let(:json) { JSON.parse(serialize(user)) }
 
     it 'serializes the correct attributes' do

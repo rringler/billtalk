@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LoggedInMenuItems from './LoggedInMenuItems';
 import LoggedOutMenuItems from './LoggedOutMenuItems';

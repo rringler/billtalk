@@ -16,7 +16,7 @@ RSpec.describe Election, type: :model do
   context 'factories' do
     let(:factories) do
       [
-        FactoryGirl.build(:election)
+        FactoryBot.build(:election)
       ]
     end
 
@@ -26,7 +26,7 @@ RSpec.describe Election, type: :model do
   end
 
   context 'validations' do
-    subject { FactoryGirl.build(:election) }
+    subject { FactoryBot.build(:election) }
 
     it { is_expected.to validate_presence_of(:date) }
   end

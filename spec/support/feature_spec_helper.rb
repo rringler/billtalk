@@ -7,4 +7,13 @@ module FeatureSpecHelper
       end
     end
   end
+
+  def pause_test
+    $stderr.write 'Press enter to continue'
+    $stdin.gets
+  end
+end
+
+RSpec.configure do |rspec|
+  rspec.include FeatureSpecHelper, type: :feature
 end

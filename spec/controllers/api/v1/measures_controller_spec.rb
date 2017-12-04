@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::MeasuresController, type: :controller do
   describe '#create' do
-    let(:election)      { FactoryGirl.create(:election) }
-    let(:measure_attrs) { FactoryGirl.attributes_for(:measure).merge(election_id: election.id) }
+    let(:election)      { FactoryBot.create(:election) }
+    let(:measure_attrs) { FactoryBot.attributes_for(:measure).merge(election_id: election.id) }
     let(:params)        { { measure: measure_attrs } }
 
     subject { post(:create, params: params) }
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::MeasuresController, type: :controller do
   end
 
   describe '#show' do
-    let!(:measure)     { FactoryGirl.create(:measure) }
+    let!(:measure)     { FactoryBot.create(:measure) }
     let(:params)       { { id: measure.id } }
     let(:json)         { JSON.parse(subject.body) }
     let(:json_data_id) { json['data']['id']}
@@ -46,7 +46,7 @@ RSpec.describe Api::V1::MeasuresController, type: :controller do
   end
 
   describe '#update' do
-    let!(:measure) { FactoryGirl.create(:measure, :failed) }
+    let!(:measure) { FactoryBot.create(:measure, :failed) }
     let(:params)   { { id: measure.id, measure: { result: true } } }
 
     subject { post(:update, params: params) }
@@ -69,7 +69,7 @@ RSpec.describe Api::V1::MeasuresController, type: :controller do
   end
 
   describe '#destroy' do
-    let!(:measure) { FactoryGirl.create(:measure, :failed) }
+    let!(:measure) { FactoryBot.create(:measure, :failed) }
     let(:params)   { { id: measure.id } }
 
     subject { post(:destroy, params: params) }

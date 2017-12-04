@@ -18,8 +18,8 @@ RSpec.describe Comment, type: :model do
   context 'factories' do
     let(:factories) do
       [
-        FactoryGirl.build(:measure_comment),
-        FactoryGirl.build(:comment_comment)
+        FactoryBot.build(:measure_comment),
+        FactoryBot.build(:comment_comment)
       ]
     end
 
@@ -29,7 +29,7 @@ RSpec.describe Comment, type: :model do
   end
 
   context 'validations' do
-    subject { FactoryGirl.build(:measure_comment) }
+    subject { FactoryBot.build(:measure_comment) }
 
     it { is_expected.to validate_presence_of(:text) }
   end

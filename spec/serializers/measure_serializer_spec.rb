@@ -16,7 +16,7 @@ require 'rails_helper'
 
 RSpec.describe MeasureSerializer, type: :serializer do
   describe "attributes" do
-    let(:measure) { FactoryGirl.create(:measure) }
+    let(:measure) { FactoryBot.create(:measure) }
     let(:json)    { JSON.parse(serialize(measure)) }
 
     it 'serializes the correct attributes' do

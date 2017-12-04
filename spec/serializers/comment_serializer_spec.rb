@@ -17,7 +17,7 @@ require 'rails_helper'
 RSpec.describe CommentSerializer, type: :serializer do
   describe "attributes" do
     context 'for comments on measures' do
-      let(:comment) { FactoryGirl.create(:measure_comment) }
+      let(:comment) { FactoryBot.create(:measure_comment) }
       let(:json)    { JSON.parse(serialize(comment)) }
 
       it 'serializes the correct attributes' do
@@ -38,7 +38,7 @@ RSpec.describe CommentSerializer, type: :serializer do
     end
 
     context 'for comments on comments' do
-      let(:comment) { FactoryGirl.create(:comment_comment) }
+      let(:comment) { FactoryBot.create(:comment_comment) }
       let(:json)    { JSON.parse(serialize(comment)) }
 
       it 'serializes the correct attributes' do

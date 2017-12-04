@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Alert, Button, Col, ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import ClosableAlert from 'packs/client/Lib/ClosableAlert';
@@ -21,10 +21,6 @@ const FIELDS = {
 };
 
 class Login extends Component {
-  static contextTypes = {
-    router: PropTypes.object
-  };
-
   onSubmit = (data) => {
     return this.props.loginUser(data).then(
       this.onSubmitSuccess,
@@ -33,7 +29,7 @@ class Login extends Component {
   }
 
   onSubmitSuccess = () => {
-    this.context.router.push('/');
+    this.props.history.push('/');
   }
 
   onSubmitFail = () => {
@@ -53,6 +49,7 @@ class Login extends Component {
     return (
       <Field name={field}
              id={field}
+             key={field}
              label={label}
              component={this.renderInput}
              type={type}

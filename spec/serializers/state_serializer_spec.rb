@@ -13,7 +13,7 @@ require 'rails_helper'
 
 RSpec.describe StateSerializer, type: :serializer do
   describe "attributes" do
-    let(:state) { FactoryGirl.create(:state, election_count: 3) }
+    let(:state) { FactoryBot.create(:state, election_count: 3) }
     let(:json)  { JSON.parse(serialize(state)) }
 
     it 'serializes the correct attributes' do

@@ -8,3 +8,7 @@ module SerializerSpecHelper
     adapter.to_json
   end
 end
+
+RSpec.configure do |rspec|
+  rspec.include SerializerSpecHelper, type: :serializer
+end

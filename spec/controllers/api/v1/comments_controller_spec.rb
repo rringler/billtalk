@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::CommentsController, type: :controller do
   describe '#create' do
-    let(:measure)       { FactoryGirl.create(:measure) }
+    let(:measure)       { FactoryBot.create(:measure) }
     let(:comment_attrs) do
       {
         text:             FFaker::Lorem.paragraph,
@@ -51,7 +51,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
   end
 
   describe '#show' do
-    let!(:comment)     { FactoryGirl.create(:measure_comment) }
+    let!(:comment)     { FactoryBot.create(:measure_comment) }
     let(:params)       { { id: comment.id } }
     let(:json)         { JSON.parse(subject.body) }
     let(:json_data_id) { json['data']['id']}
@@ -68,7 +68,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
   end
 
   describe '#update' do
-    let!(:comment) { FactoryGirl.create(:measure_comment) }
+    let!(:comment) { FactoryBot.create(:measure_comment) }
     let(:params)   { { id: comment.id, comment: { text: 'updated' } } }
 
     subject { post(:update, params: params) }
@@ -93,7 +93,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
   end
 
   describe '#destroy' do
-    let!(:comment) { FactoryGirl.create(:measure_comment) }
+    let!(:comment) { FactoryBot.create(:measure_comment) }
     let(:params)   { { id: comment.id } }
 
     subject { post(:destroy, params: params) }

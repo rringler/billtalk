@@ -8,7 +8,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     subject { post(:create, params: params) }
 
     context 'when successful' do
-      let(:user_attrs) { FactoryGirl.attributes_for(:user) }
+      let(:user_attrs) { FactoryBot.attributes_for(:user) }
       let(:params)     { { user: user_attrs } }
 
       it 'returns a successful status code' do
@@ -35,9 +35,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     context 'when unsuccessful' do
-      let!(:existing_user) { FactoryGirl.create(:user) }
+      let!(:existing_user) { FactoryBot.create(:user) }
       let(:existing_email) { existing_user.email }
-      let(:user_attrs)     { FactoryGirl.attributes_for(:user, email: existing_email) }
+      let(:user_attrs)     { FactoryBot.attributes_for(:user, email: existing_email) }
       let(:params)         { { user: user_attrs } }
 
       it 'returns an :unprocessable_entity status code' do
@@ -61,7 +61,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     subject { get(:show, params: params) }
 
     context 'when the requested user exists' do
-      let(:user)   { FactoryGirl.create(:user) }
+      let(:user)   { FactoryBot.create(:user) }
       let(:params) { { id: user.id } }
 
       it 'returns a :successful status code' do
@@ -92,7 +92,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe '#update', authenticated: true do
-    let(:user)      { FactoryGirl.create(:user) }
+    let(:user)      { FactoryBot.create(:user) }
     let(:email)     { user.email }
     let(:new_email) { "new_#{email}" }
     let(:params)    { { id: user.id, user: { email: new_email } } }
@@ -120,7 +120,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe '#destroy', authenticated: true do
-    let(:user)   { FactoryGirl.create(:user) }
+    let(:user)   { FactoryBot.create(:user) }
     let(:params) { { id: user.id } }
     let(:json)   { JSON.parse(subject.body, symbolize_names: true) }
 

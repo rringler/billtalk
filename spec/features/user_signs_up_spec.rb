@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'signing up', type: :feature do
   context 'when successful' do
-    let(:user_attrs) { FactoryGirl.attributes_for(:user) }
+    let(:user_attrs) { FactoryBot.attributes_for(:user) }
 
     before { expect(User.count).to eq(0) }
 
@@ -23,7 +23,7 @@ RSpec.describe 'signing up', type: :feature do
   end
 
   context 'when unsuccessful' do
-    let!(:user) { FactoryGirl.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
 
     before { expect(User.count).to eq(1) }
 

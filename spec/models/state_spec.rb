@@ -15,7 +15,7 @@ RSpec.describe State, type: :model do
   context 'factories' do
     let(:factories) do
       [
-        FactoryGirl.build(:state)
+        FactoryBot.build(:state)
       ]
     end
 
@@ -25,7 +25,7 @@ RSpec.describe State, type: :model do
   end
 
   context 'validations' do
-    subject { FactoryGirl.build(:state) }
+    subject { FactoryBot.build(:state) }
 
     it { is_expected.to validate_presence_of(:code) }
 

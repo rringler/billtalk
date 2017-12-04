@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
 
-import routes from './routes';
+import router from './router';
 import reducers from './reducers';
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
@@ -13,7 +12,7 @@ export default class Client extends Component {
   render() {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
-        <Router history={browserHistory} routes={routes}/>
+        {router}
       </Provider>
     );
   }

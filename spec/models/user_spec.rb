@@ -15,7 +15,7 @@ RSpec.describe User, type: :model do
   context 'factories' do
     let(:factories) do
       [
-        FactoryGirl.build(:user)
+        FactoryBot.build(:user)
       ]
     end
 
@@ -25,7 +25,7 @@ RSpec.describe User, type: :model do
   end
 
   context 'validations' do
-    subject { FactoryGirl.build(:user) }
+    subject { FactoryBot.build(:user) }
 
     it { is_expected.to validate_presence_of(:email) }
 

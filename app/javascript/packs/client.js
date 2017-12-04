@@ -9,4 +9,4 @@
 import Client from './client/';
 import WebpackerReact from 'webpacker-react';
 
-WebpackerReact.register(Client);
+WebpackerReact.setup({Client});

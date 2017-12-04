@@ -42,7 +42,7 @@ RSpec.describe Api::V1::StatesController, type: :controller do
 
   describe '#show', authenticated: false do
     let(:state)        { State.random }
-    let!(:elections)   { FactoryGirl.create_list(:election, 2, state: state) }
+    let!(:elections)   { FactoryBot.create_list(:election, 2, state: state) }
     let(:params)       { { params: { id: state.id } } }
     let(:json)         { JSON.parse(subject.body, symbolize_names: true) }
     let(:json_data_id) { json.dig(:data, :id) }
@@ -74,7 +74,7 @@ RSpec.describe Api::V1::StatesController, type: :controller do
   end
 
   describe '#destroy', authenticated: true do
-    let!(:state) { FactoryGirl.create(:state, code: 'PT') }
+    let!(:state) { FactoryBot.create(:state, code: 'PT') }
     let(:params) { { params: { id: state.id } } }
 
     subject { post(:destroy, params) }

@@ -10,9 +10,8 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'ffaker'
-require_relative 'support/feature_spec_helper'
-require_relative 'support/serializer_spec_helper'
 
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir[Rails.root.join("spec/controllers/shared/**/*.rb")].each { |f| require f }
 
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -65,8 +64,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.include FeatureSpecHelper,    type: :feature
-  config.include SerializerSpecHelper, type: :serializer
+  config.before(:suite) { Webpacker.compile }
 end
 
 Shoulda::Matchers.configure do |config|

@@ -9,7 +9,7 @@
 #  updated_at      :datetime         not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     accepts_tos           true
     sequence(:email)      { |n| "user_#{n.to_s.rjust(2, '0')}@example.com" }
@@ -21,7 +21,7 @@ FactoryGirl.define do
     end
 
     after(:build) do |user, evaluator|
-      user.comments += FactoryGirl.build_list(
+      user.comments += FactoryBot.build_list(
         :measure_comment,
         evaluator.comment_count,
         user: user

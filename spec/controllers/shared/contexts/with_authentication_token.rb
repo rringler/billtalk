@@ -9,7 +9,7 @@ RSpec.configure do |rspec|
 end
 
 RSpec.shared_context 'with authentication token', shared_context: :metadata do
-  let(:user)  { FactoryGirl.create(:user) }
+  let(:user)  { FactoryBot.create(:user) }
   let(:token) { Knock::AuthToken.new(payload: { sub: user.id }).token }
 
   before { request.headers['Authorization'] = "Bearer #{token}" }

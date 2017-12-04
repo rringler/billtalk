@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'signing in', type: :feature do
   context 'via the /login route' do
     context 'when successful' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
 
       it 'redirects to the root url' do
         visit '/login'
@@ -20,7 +20,7 @@ RSpec.describe 'signing in', type: :feature do
     end
 
     context 'when unsuccessful' do
-      let(:user) { FactoryGirl.build(:user) }
+      let(:user) { FactoryBot.build(:user) }
 
       it 'shows an error alert' do
         visit '/login'
@@ -40,7 +40,7 @@ RSpec.describe 'signing in', type: :feature do
 
   context 'via the Navbar' do
     context 'when successful' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
 
       it 'rerenders with the logged in menubar items' do
         visit '/'
@@ -60,7 +60,7 @@ RSpec.describe 'signing in', type: :feature do
     end
 
     context 'when unsuccessful' do
-      let(:user) { FactoryGirl.build(:user) }
+      let(:user) { FactoryBot.build(:user) }
 
       it 'does not rerender with the logged in menubar items' do
         visit '/'

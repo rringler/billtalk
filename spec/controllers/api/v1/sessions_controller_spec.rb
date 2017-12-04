@@ -8,7 +8,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
     subject { post(:create, params: params) }
 
     context 'with valid credentials' do
-      let(:user)         { FactoryGirl.create(:user) }
+      let(:user)         { FactoryBot.create(:user) }
       let(:email)        { user.email }
       let(:password)     { user.password }
       let(:params)       { { auth: { email: email, password: password } } }
@@ -26,7 +26,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
     end
 
     context 'with invalid credentials' do
-      let(:user)     { FactoryGirl.build(:user) }
+      let(:user)     { FactoryBot.build(:user) }
       let(:email)    { user.email }
       let(:password) { user.password }
       let(:params)   { { auth: { email: email, password: password } } }

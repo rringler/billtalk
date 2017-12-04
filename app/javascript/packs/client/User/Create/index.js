@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Button, Col, ControlLabel, Form, FormGroup } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -25,13 +25,9 @@ const FIELDS = {
 };
 
 class SignUp extends Component {
-  static contextTypes = {
-    router: PropTypes.object
-  };
-
   onSubmit = (data) => {
     this.props.createUser(data)
-      .then(() => { this.context.router.push('/'); });
+      .then(() => { this.props.history.push('/'); });
   }
 
   renderField = ({ label, type, validations }, field) => {

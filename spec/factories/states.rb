@@ -9,7 +9,7 @@
 #  name       :string           not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :state do
     skip_create
 
@@ -20,7 +20,7 @@ FactoryGirl.define do
     end
 
     after(:build) do |state, evaluator|
-      state.elections += FactoryGirl.build_list(
+      state.elections += FactoryBot.build_list(
         :election,
         evaluator.election_count,
         state: state

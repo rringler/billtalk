@@ -18,7 +18,7 @@ RSpec.describe Measure, type: :model do
   context 'factories' do
     let(:factories) do
       [
-        FactoryGirl.build(:measure)
+        FactoryBot.build(:measure)
       ]
     end
 
@@ -28,7 +28,7 @@ RSpec.describe Measure, type: :model do
   end
 
   context 'validations' do
-    subject { FactoryGirl.build(:measure) }
+    subject { FactoryBot.build(:measure) }
 
     it { is_expected.to validate_presence_of(:election) }
     it { is_expected.to validate_presence_of(:title) }

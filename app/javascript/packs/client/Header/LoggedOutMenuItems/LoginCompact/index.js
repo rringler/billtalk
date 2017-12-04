@@ -49,6 +49,7 @@ class LoginCompact extends Component {
     return (
       <Field name={field}
              id={field}
+             key={field}
              placeholder={placeholder}
              component={this.renderInput}
              type={type}

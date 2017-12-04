@@ -15,7 +15,7 @@ require 'rails_helper'
 RSpec.describe ElectionSerializer, type: :serializer do
   describe "attributes" do
     let(:election) do
-      FactoryGirl.create(:election, measure_count: 3)
+      FactoryBot.create(:election, measure_count: 3)
     end
 
     let(:json) { JSON.parse(serialize(election)) }

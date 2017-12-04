@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ElectionsController, type: :controller do
   describe '#create' do
-    let(:election_attrs) { FactoryGirl.attributes_for(:election) }
+    let(:election_attrs) { FactoryBot.attributes_for(:election) }
     let(:params)         { { election: election_attrs } }
 
     subject { post(:create, params: params) }
@@ -28,7 +28,7 @@ RSpec.describe Api::V1::ElectionsController, type: :controller do
   end
 
   describe '#show' do
-    let!(:election)    { FactoryGirl.create(:election) }
+    let!(:election)    { FactoryBot.create(:election) }
     let(:params)       { { params: { id: election.id } } }
     let(:json)         { JSON.parse(subject.body) }
     let(:json_data_id) { json['data']['id']}
@@ -45,7 +45,7 @@ RSpec.describe Api::V1::ElectionsController, type: :controller do
   describe '#update' do
     let!(:current_date) { Time.zone.now.change(usec: 0) }
     let!(:future_date)  { current_date + 1.day }
-    let!(:election)     { FactoryGirl.create(:election, date: current_date) }
+    let!(:election)     { FactoryBot.create(:election, date: current_date) }
     let(:params)        { { id: election.id, election: { date: future_date } } }
 
     subject { post(:update, params: params) }
@@ -67,7 +67,7 @@ RSpec.describe Api::V1::ElectionsController, type: :controller do
   end
 
   describe '#destroy' do
-    let!(:election) { FactoryGirl.create(:election) }
+    let!(:election) { FactoryBot.create(:election) }
     let(:params)    { { id: election.id } }
 
     subject { post(:destroy, params: params) }

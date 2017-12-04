@@ -10,7 +10,7 @@
 #  name       :string           not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :election do
     state_id { State.random.id }
     date     { Date.today }
@@ -21,7 +21,7 @@ FactoryGirl.define do
     end
 
     after(:build) do |election, evaluator|
-      election.measures += FactoryGirl.build_list(
+      election.measures += FactoryBot.build_list(
         :measure,
         evaluator.measure_count,
         election: election
