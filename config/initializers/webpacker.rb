@@ -1,1 +1,1 @@
-Webpacker::Compiler.watched_paths << 'app/javascript/packs/client'
+Webpacker::Compiler.watched_paths << 'app/javascript/components/Client'

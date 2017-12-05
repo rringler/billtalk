@@ -1,2 +1,2 @@
-rails: ./bin/rails server
-react: ./bin/webpack-watcher
+rails: ./bin/rails server -p 3000
+react: ./bin/webpack-dev-server
