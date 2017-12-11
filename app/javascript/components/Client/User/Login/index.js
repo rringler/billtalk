@@ -66,7 +66,7 @@ class Login extends Component {
         {error && this.renderAlert()}
 
         <Form
-          id='login'
+          id='sessions-new'
           onSubmit={handleSubmit(this.onSubmit)}
         >
           <Field

@@ -9,7 +9,7 @@ RSpec.describe 'signing up', type: :feature do
     it 'creates a new User' do
       visit '/signup'
 
-      within('div.content') do
+      within('form#users-new') do
         fill_in 'email',    with: user_attrs[:email]
         fill_in 'password', with: user_attrs[:password]
         check   'tos'
@@ -30,7 +30,7 @@ RSpec.describe 'signing up', type: :feature do
     it 'does not create a new User' do
       visit '/signup'
 
-      within('div.content') do
+      within('form#users-new') do
         fill_in 'email',    with: user.email
         fill_in 'password', with: user.password
         check   'tos'

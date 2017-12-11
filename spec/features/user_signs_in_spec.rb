@@ -8,7 +8,7 @@ RSpec.describe 'signing in', type: :feature do
       it 'redirects to the root url' do
         visit '/login'
 
-        within('form#login') do
+        within('form#sessions-new') do
           fill_in 'email',    with: user.email
           fill_in 'password', with: user.password
 
@@ -25,7 +25,7 @@ RSpec.describe 'signing in', type: :feature do
       it 'shows an error alert' do
         visit '/login'
 
-        within('form#login') do
+        within('form#sessions-new') do
           fill_in 'email',    with: user.email
           fill_in 'password', with: user.password
 
@@ -47,7 +47,7 @@ RSpec.describe 'signing in', type: :feature do
 
         click_link 'Login'
 
-        within('form#login-compact') do
+        within('form#sessions-new-compact') do
           fill_in 'email',    with: user.email
           fill_in 'password', with: user.password
 
@@ -67,7 +67,7 @@ RSpec.describe 'signing in', type: :feature do
 
         click_link 'Login'
 
-        within('form#login-compact') do
+        within('form#sessions-new-compact') do
           fill_in 'email',    with: user.email
           fill_in 'password', with: user.password
 

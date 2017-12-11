@@ -52,7 +52,10 @@ class LoginCompact extends Component {
 
     return (
       <div className='pull-right'>
-        <Form id='login-compact' onSubmit={handleSubmit(this.onSubmit)}>
+        <Form
+          id='sessions-new-compact'
+          onSubmit={handleSubmit(this.onSubmit)}
+        >
           <Field
             label='Email'
             name='email'

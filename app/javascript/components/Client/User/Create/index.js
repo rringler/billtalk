@@ -81,6 +81,7 @@ class SignUp extends Component {
         <h1>Join the conversation</h1>
 
         <Form
+          id='users-new'
           className='create-user-form'
           onSubmit={handleSubmit(this.onSubmit)}
         >
