@@ -69,6 +69,8 @@ RSpec.configure do |config|
     strategy     = feature_spec ? :truncation : :transaction
 
     DatabaseCleaner.strategy = strategy
+
+    Rails.application.load_seed
   end
 
   config.before(:each) { DatabaseCleaner.start }

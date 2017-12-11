@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-US_STATES = [
+[
   { code: 'AL', name: 'Alabama' },
   { code: 'AK', name: 'Alaska' },
   { code: 'AS', name: 'American Samoa' },
@@ -66,6 +66,4 @@ US_STATES = [
   { code: 'WV', name: 'West Virginia' },
   { code: 'WI', name: 'Wisconsin' },
   { code: 'WY', name: 'Wyoming' }
-].freeze
-
-US_STATES.each { |attrs| State.find_or_create_by!(attrs) }
+].each { |attrs| State.find_or_create_by!(attrs) }
