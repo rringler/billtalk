@@ -11,27 +11,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       let(:user_attrs) { FactoryBot.attributes_for(:user) }
       let(:params)     { { user: user_attrs } }
 
-      it 'returns a successful status code' do
-        is_expected.to have_http_status(:ok)
-      end
+      it { is_expected.to have_http_status(:ok) }
 
-      it 'creates a new user with the correct attributes' do
+      it 'creates a new User record' do
         expect { subject }.to change { User.count }.by(1)
-
-        created_user  = User.last
-        created_attrs = created_user.attributes.with_indifferent_access
-
-        expect(created_attrs).to include(user_attrs.slice(:email))
       end
 
-      it 'returns a proper JSON response' do
-        Timecop.freeze do
-          expect(json.dig(:data, :attributes)).to eq(
-            email: User.last.email,
-            token: User.last.send(:generate_token)
-          )
-        end
-      end
+      it_behaves_like 'a json response'
     end
 
     context 'when unsuccessful' do
@@ -40,17 +26,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       let(:user_attrs)     { FactoryBot.attributes_for(:user, email: existing_email) }
       let(:params)         { { user: user_attrs } }
 
-      it 'returns an :unprocessable_entity status code' do
-        is_expected.to have_http_status(:unprocessable_entity)
-      end
+      it { is_expected.to have_http_status(:unprocessable_entity) }
 
-      it 'returns a proper JSON response' do
-        expect(json[:errors]).to contain_exactly(
-          status: 422,
-          title:  'Validation Failed',
-          detail: 'Email has already been taken'
-        )
-      end
+      it_behaves_like 'a json response'
     end
   end
 
@@ -64,22 +42,15 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       let(:user)   { FactoryBot.create(:user) }
       let(:params) { { id: user.id } }
 
-      it 'returns a :successful status code' do
-        is_expected.to have_http_status(:ok)
-      end
+      it { is_expected.to have_http_status(:ok) }
 
-      it 'returns a proper JSON response' do
-        expect(json.dig(:data, :id)).to         eq(user.id.to_s)
-        expect(json.dig(:data, :attributes)).to eq(email: user.email)
-      end
+      it_behaves_like 'a json response'
     end
 
     context 'when the requested user does not exists' do
       let(:params) { { id: -1 } }
 
-      it 'returns a :not_found status code' do
-        is_expected.to have_http_status(:not_found)
-      end
+      it { is_expected.to have_http_status(:not_found) }
 
       it 'returns a proper JSON response' do
         expect(json.dig(:errors)).to contain_exactly(
@@ -101,9 +72,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     subject { post(:update, params: params) }
 
     context 'when successful' do
-      it 'returns a successful status code' do
-        is_expected.to have_http_status(:ok)
-      end
+      it { is_expected.to have_http_status(:ok) }
 
       it 'updates the user' do
         expect { subject }.to change {
@@ -111,11 +80,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         }.from(email).to(new_email)
       end
 
-      it 'returns a proper JSON response' do
-        expect(json.dig(:data, :attributes)).to eq(
-          email: new_email
-        )
-      end
+      it_behaves_like 'a json response'
     end
   end
 
@@ -127,18 +92,13 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     subject { post(:destroy, params: params) }
 
     context 'when successful' do
-      it 'returns a successful status code' do
-        is_expected.to have_http_status(:ok)
-      end
+      it { is_expected.to have_http_status(:ok) }
 
       it 'destroys the user record' do
         expect { subject }.to change { User.count }.by(-1)
       end
 
-      it 'returns a proper JSON response' do
-        expect(json.dig(:data, :id)).to         eq(user.id.to_s)
-        expect(json.dig(:data, :attributes)).to eq(email: user.email)
-      end
+      it_behaves_like 'a json response'
     end
   end
 end

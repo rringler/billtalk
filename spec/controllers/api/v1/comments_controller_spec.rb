@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::CommentsController, type: :controller do
-  describe '#create' do
-    let(:measure)       { FactoryBot.create(:measure) }
+  describe '#create', authenticated: true do
+    let(:measure) { FactoryBot.create(:measure) }
+
     let(:comment_attrs) do
       {
         text:             FFaker::Lorem.paragraph,
@@ -13,44 +14,20 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       }
     end
 
-    let(:params)         { { comment: comment_attrs } }
+    let(:params) { { comment: comment_attrs } }
 
     subject { post(:create, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-      it { expect { subject }.to change { Comment.count }.by(1) }
-
-      it 'returns the serialized comment' do
-        json                = JSON.parse(subject.body)
-        json_attributes     = json['data']['attributes']
-        expected_attributes = {
-          'text'             => comment_attrs[:text],
-          'commentable-id'   => comment_attrs[:commentable_id],
-          'commentable-type' => comment_attrs[:commentable_type],
-          'measure-start'    => comment_attrs[:measure_start],
-          'measure-end'      => comment_attrs[:measure_end]
-        }
-
-        expect(json_attributes).to include(expected_attributes)
-      end
-
-      # it do
-      #   created_comment = Comment.last
-      #   created_attrs   = created_comment.attributes.with_indifferent_access
-
-      #   expect(created_attrs).to include(comment_attrs)
-      # end
+    it 'creates a new Comment record' do
+      expect { subject }.to change { Comment.count }.by(1)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#show' do
+  describe '#show', authenticated: false do
     let!(:comment)     { FactoryBot.create(:measure_comment) }
     let(:params)       { { id: comment.id } }
     let(:json)         { JSON.parse(subject.body) }
@@ -60,58 +37,40 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
 
     it { is_expected.to have_http_status(:ok) }
 
-    it 'returns the serialized comment' do
-      expect(response).to have_http_status(:ok)
-
-      expect(json_data_id).to eq(comment.id.to_s)
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#update' do
+  describe '#update', authenticated: true do
     let!(:comment) { FactoryBot.create(:measure_comment) }
     let(:params)   { { id: comment.id, comment: { text: 'updated' } } }
+    let(:user)     { comment.user }
 
     subject { post(:update, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token' do
-        let(:user) { comment.user }
-      end
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'updates the correct comment' do
-        expect { subject }.to change {
-          comment.reload.text
-        }.to('updated')
-      end
+    it 'updates the correct Comment record' do
+      expect { subject }.to change {
+        comment.reload.text
+      }.to('updated')
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#destroy' do
+  describe '#destroy', authenticated: true do
     let!(:comment) { FactoryBot.create(:measure_comment) }
     let(:params)   { { id: comment.id } }
+    let(:user)     { comment.user }
 
     subject { post(:destroy, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token' do
-        let(:user) { comment.user }
-      end
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'destroys the comment record' do
-        expect { subject }.to change { Comment.count }.by(-1)
-      end
+    it 'destroys the comment record' do
+      expect { subject }.to change { Comment.count }.by(-1)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 end

@@ -1,33 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ElectionsController, type: :controller do
-  describe '#create' do
+  describe '#create', authenticated: true do
     let(:election_attrs) { FactoryBot.attributes_for(:election) }
     let(:params)         { { election: election_attrs } }
 
     subject { post(:create, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'returns the serialized election' do
-        expect { subject }.to change { Election.count }.by(1)
-
-        created_election = Election.last
-        created_attrs   = created_election.attributes.with_indifferent_access
-
-        expect(created_attrs).to include(election_attrs)
-      end
+    it 'creates a new Election record' do
+      expect { subject }.to change { Election.count }.by(1)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#show' do
+  describe '#show', authenticated: false do
     let!(:election)    { FactoryBot.create(:election) }
     let(:params)       { { params: { id: election.id } } }
     let(:json)         { JSON.parse(subject.body) }
@@ -35,14 +24,12 @@ RSpec.describe Api::V1::ElectionsController, type: :controller do
 
     subject { get(:show, params) }
 
-    it 'returns the serialized election' do
-      expect(response).to have_http_status(:ok)
+    it { is_expected.to have_http_status(:ok) }
 
-      expect(json_data_id).to eq(election.id.to_s)
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#update' do
+  describe '#update', authenticated: true do
     let!(:current_date) { Time.zone.now.change(usec: 0) }
     let!(:future_date)  { current_date + 1.day }
     let!(:election)     { FactoryBot.create(:election, date: current_date) }
@@ -50,40 +37,29 @@ RSpec.describe Api::V1::ElectionsController, type: :controller do
 
     subject { post(:update, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
-      it { is_expected.to have_http_status(:ok) }
+    it { is_expected.to have_http_status(:ok) }
 
-      it 'updates the correct measure' do
-        expect { subject }.to change {
-          election.reload.date
-        }.from(current_date).to(future_date)
-      end
+    it 'updates the correct Election record' do
+      expect { subject }.to change {
+        election.reload.date
+      }.from(current_date).to(future_date)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#destroy' do
+  describe '#destroy', authenticated: true do
     let!(:election) { FactoryBot.create(:election) }
     let(:params)    { { id: election.id } }
 
     subject { post(:destroy, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'destroys the election record' do
-        expect { subject }.to change { Election.count }.by(-1)
-      end
+    it 'destroys the Election record' do
+      expect { subject }.to change { Election.count }.by(-1)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 end

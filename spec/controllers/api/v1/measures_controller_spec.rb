@@ -1,34 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::MeasuresController, type: :controller do
-  describe '#create' do
+  describe '#create', authenticated: true do
     let(:election)      { FactoryBot.create(:election) }
     let(:measure_attrs) { FactoryBot.attributes_for(:measure).merge(election_id: election.id) }
     let(:params)        { { measure: measure_attrs } }
 
     subject { post(:create, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'returns the serialized measure' do
-        expect { subject }.to change { Measure.count }.by(1)
-
-        created_measure = Measure.last
-        created_attrs   = created_measure.attributes.with_indifferent_access
-
-        expect(created_attrs).to include(measure_attrs)
-      end
+    it 'creates a Measure record' do
+      expect { subject }.to change { Measure.count }.by(1)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#show' do
+  describe '#show', authenticated: false do
     let!(:measure)     { FactoryBot.create(:measure) }
     let(:params)       { { id: measure.id } }
     let(:json)         { JSON.parse(subject.body) }
@@ -38,54 +27,38 @@ RSpec.describe Api::V1::MeasuresController, type: :controller do
 
     it { is_expected.to have_http_status(:ok) }
 
-    it 'returns the serialized measure' do
-      expect(response).to have_http_status(:ok)
-
-      expect(json_data_id).to eq(measure.id.to_s)
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#update' do
+  describe '#update', authenticated: true do
     let!(:measure) { FactoryBot.create(:measure, :failed) }
     let(:params)   { { id: measure.id, measure: { result: true } } }
 
     subject { post(:update, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'updates the correct measure' do
-        expect { subject }.to change {
-          measure.reload.result
-        }.from(false).to(true)
-      end
+    it 'updates the correct measure' do
+      expect { subject }.to change {
+        measure.reload.result
+      }.from(false).to(true)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 
-  describe '#destroy' do
+  describe '#destroy', authenticated: true do
     let!(:measure) { FactoryBot.create(:measure, :failed) }
     let(:params)   { { id: measure.id } }
 
     subject { post(:destroy, params: params) }
 
-    context 'when authenticated' do
-      include_context 'with authentication token'
+    it { is_expected.to have_http_status(:ok) }
 
-      it { is_expected.to have_http_status(:ok) }
-
-      it 'destroys the measure record' do
-        expect { subject }.to change { Measure.count }.by(-1)
-      end
+    it 'destroys the Measure record' do
+      expect { subject }.to change { Measure.count }.by(-1)
     end
 
-    context 'when not authenticated' do
-      it { is_expected.to have_http_status(:unauthorized) }
-    end
+    it_behaves_like 'a json response'
   end
 end

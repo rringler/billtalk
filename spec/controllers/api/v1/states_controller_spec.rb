@@ -10,14 +10,7 @@ RSpec.describe Api::V1::StatesController, type: :controller do
 
     it { is_expected.to have_http_status(:ok) }
 
-    it 'returns the serialized states' do
-      expect(json_attrs).to all(
-        include(
-          code: be_a(String),
-          name: be_a(String)
-        )
-      )
-    end
+    it_behaves_like 'a json response'
   end
 
   describe '#create', authenticated: true do
@@ -29,14 +22,11 @@ RSpec.describe Api::V1::StatesController, type: :controller do
     context 'when successful' do
       it { is_expected.to have_http_status(:ok) }
 
-      it 'returns the serialized state' do
+      it 'creates a new State record' do
         expect { subject }.to change { State.count }.by(1)
-
-        created_state = State.find!(code: state_attrs[:code])
-        created_attrs = created_state.attributes.with_indifferent_access
-
-        expect(created_attrs).to include(state_attrs)
       end
+
+      it_behaves_like 'a json response'
     end
   end
 
@@ -52,7 +42,21 @@ RSpec.describe Api::V1::StatesController, type: :controller do
     it { is_expected.to have_http_status(:ok) }
 
     it 'returns the serialized state' do
-      expect(json_data_id).to eq(state.id.to_s)
+      expect(json).to include(
+        data: {
+          id:         state.id.to_s,
+          type:       'states',
+          attributes: {
+            code: state.code,
+            name: state.name
+          },
+          relationships: {
+            elections: {
+              data: state.elections.map { |e| { id: e.id.to_s, type: 'elections' } }
+            }
+          }
+        }
+      )
     end
   end
 

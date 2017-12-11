@@ -14,9 +14,9 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       let(:params)       { { auth: { email: email, password: password } } }
       let(:expected_jwt) { user.send(:generate_token) }
 
-      it 'returns a successful status code' do
-        is_expected.to have_http_status(:created)
-      end
+      it { is_expected.to have_http_status(:created) }
+
+      it_behaves_like 'a json response'
 
       it 'returns a proper JSON response' do
         Timecop.freeze do
@@ -31,9 +31,9 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       let(:password) { user.password }
       let(:params)   { { auth: { email: email, password: password } } }
 
-      it 'returns a not found status code' do
-        is_expected.to have_http_status(:not_found)
-      end
+      it { is_expected.to have_http_status(:not_found) }
+
+      it_behaves_like 'a json response'
 
       it 'returns a proper JSON response' do
         expect(json[:errors]).to contain_exactly(
