@@ -8,7 +8,9 @@ import { fetchState } from './actions';
 
 class State extends Component {
   componentDidMount() {
-    this.props.fetchState(this.props.params.id);
+    const { id } = this.props.params;
+
+    this.props.fetchState(id);
   }
 
   renderElection(election) {

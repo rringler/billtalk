@@ -1,31 +1,17 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { Alert, Button, Col, ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
+import { Alert, Button, Col, ControlLabel, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import ClosableAlert from 'components/Client/Lib/ClosableAlert';
 import { connect } from 'react-redux';
 import { loginUser } from './actions';
-import { email, required } from 'components/Client/validations';
-
-const FIELDS = {
-  email: {
-    label:       'Email',
-    type:        'email',
-    validations: [ required, email ]
-  },
-  password: {
-    label:       'Password',
-    type:        'password',
-    validations: [ required ]
-  }
-};
+import { emailRegex } from 'components/Client/validations';
 
 class Login extends Component {
-  onSubmit = (data) => {
-    return this.props.loginUser(data).then(
-      this.onSubmitSuccess,
-      this.onSubmitFail
-    );
+  onSubmit = (values) => {
+    return this.props.loginUser(values)
+      .then(this.onSubmitSuccess)
+      .catch(this.onSubmitFail);
   }
 
   onSubmitSuccess = () => {
@@ -45,41 +31,33 @@ class Login extends Component {
     );
   }
 
-  renderField = ({ label, type, validations }, field) => {
-    return (
-      <Field name={field}
-             id={field}
-             key={field}
-             label={label}
-             component={this.renderInput}
-             type={type}
-             validate={validations} />
-    );
-  }
-
-  renderInput = ({ input, label, type, meta }) => {
-    const validationState = this.validationState(meta);
+  renderField = (field) => {
+    const { meta: { touched, error } } = field;
+    const validationState = this.validationState(field);
 
     return (
       <FormGroup validationState={validationState}>
-        <ControlLabel>
-          {label}
-        </ControlLabel>
-        <input {...input} className='form-control'
-                          type={type} />
+        <label>{field.label}</label>
+        <input
+          className='form-control'
+          type={field.type}
+          placeholder={field.placeholder}
+          {...field.input}
+        />
         <FormControl.Feedback />
+        {touched ? <HelpBlock>{error}</HelpBlock> : ''}
       </FormGroup>
     );
   }
 
-  validationState = ({ touched, error, warning }) => {
+  validationState = ({ meta: { touched, error, warning }}) => {
     if (!touched) { return null; }
 
     return (error && 'error') || (warning && 'warning') || 'success';
   }
 
   render() {
-    const { error, handleSubmit, submitting } = this.props;
+    const { error, handleSubmit, pristine, submitting } = this.props;
 
     return (
       <Col sm={4} smOffset={4}>
@@ -87,15 +65,30 @@ class Login extends Component {
 
         {error && this.renderAlert()}
 
-        <Form id='login'
-              onSubmit={handleSubmit(this.onSubmit)}>
+        <Form
+          id='login'
+          onSubmit={handleSubmit(this.onSubmit)}
+        >
+          <Field
+            label='Email'
+            name='email'
+            type='text'
+            component={this.renderField}
+          />
 
-          {_.map(FIELDS, this.renderField)}
+          <Field
+            label='Password'
+            name='password'
+            type='password'
+            component={this.renderField}
+          />
 
           <FormGroup>
-            <Button bsStyle='primary'
-                    type='submit'
-                    disabled={submitting}>
+            <Button
+              bsStyle='primary'
+              type='submit'
+              disabled={pristine || submitting}
+            >
               Submit
             </Button>
           </FormGroup>
@@ -105,8 +98,27 @@ class Login extends Component {
   }
 }
 
-const LoginForm = reduxForm({
-  form: 'LoginForm'
-})(Login);
+function validate(values) {
+  const errors = {};
 
-export default connect(null, { loginUser })(LoginForm);
+  if (!values.email) {
+    errors.email = 'Please enter an email address'
+  }
+
+  if (values.email && !values.email.match(emailRegex)) {
+    errors.email = 'Please enter a valid email address'
+  }
+
+  if (!values.password) {
+    errors.password = 'Please enter a password'
+  }
+
+  return errors;
+}
+
+export default reduxForm({
+  form: 'SessionsNewForm',
+  validate
+})(
+  connect(null, { loginUser })(Login)
+);

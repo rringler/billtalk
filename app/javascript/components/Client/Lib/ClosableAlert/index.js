@@ -18,8 +18,10 @@ export default class ClosableAlert extends Component {
     if (this.state.dismissed) { return null; }
 
     return (
-      <Alert bsStyle={this.props.bsStyle || 'warning'}
-             onDismiss={this.dismiss}>
+      <Alert
+        bsStyle={this.props.bsStyle || 'warning'}
+        onDismiss={this.dismiss}
+      >
         {this.props.children}
       </Alert>
     );

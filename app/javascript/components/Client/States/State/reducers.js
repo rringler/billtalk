@@ -8,7 +8,7 @@ const null_state = {
   included: []
 };
 
-export function State(state = null_state, action) {
+export function State(state = {}, action) {
   switch (action.type) {
   case FETCH_STATE:
     return action.payload.data;

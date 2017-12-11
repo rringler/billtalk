@@ -22,11 +22,13 @@ export default class NavbarDropdownForm extends Component {
     const { open }                = this.state;
 
     return (
-      <NavDropdown eventKey={eventKey}
-                   title={title}
-                   id={id}
-                   open={open}
-                   onToggle={this.onDropdownToggle}>
+      <NavDropdown
+        eventKey={eventKey}
+        title={title}
+        id={id}
+        open={open}
+        onToggle={this.onDropdownToggle}
+      >
         {this.props.children}
       </NavDropdown>
     );
