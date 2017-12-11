@@ -12,26 +12,20 @@
 require 'rails_helper'
 
 RSpec.describe StateSerializer, type: :serializer do
-  describe "attributes" do
-    let(:state) { FactoryBot.create(:state, election_count: 3) }
-    let(:json)  { JSON.parse(serialize(state)) }
+  let(:state) { FactoryBot.create(:state, election_count: 3) }
+  let(:json)  { JSON.parse(serialize(state), symbolize_names: true) }
 
-    it 'serializes the correct attributes' do
-      expect(json['data']['attributes'].keys).to contain_exactly(
-        'code'
-      )
-
-      expect(json['data']['attributes']['code']).to eq(state.code)
-    end
-
-    it 'serializes the correct relationships' do
-      expect(json['data']['relationships'].keys).to contain_exactly(
-        'elections'
-      )
-
-      json_measures = json['data']['relationships']['elections']['data']
-
-      expect(json_measures.size).to eq(3)
-    end
+  it 'serializes the data correctly' do
+    expect(json[:data]).to match(
+      id:         state.id.to_s,
+      type:       'states',
+      attributes: {
+        code: state.code,
+        name: state.name
+      },
+      relationships: {
+        elections: a_kind_of(Hash)
+      }
+    )
   end
 end

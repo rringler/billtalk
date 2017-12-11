@@ -17,20 +17,23 @@ require 'rails_helper'
 RSpec.describe MeasureSerializer, type: :serializer do
   describe "attributes" do
     let(:measure) { FactoryBot.create(:measure) }
-    let(:json)    { JSON.parse(serialize(measure)) }
+    let(:json)    { JSON.parse(serialize(measure), symbolize_names: true) }
 
-    it 'serializes the correct attributes' do
-      expect(json['data']['attributes'].keys).to contain_exactly(
-        'title',
-        'description',
-        'text',
-        'result'
+    it 'serializes the data correctly' do
+      expect(json[:data]).to match(
+        id:         measure.id.to_s,
+        type:       'measures',
+        attributes: {
+          title:       measure.title,
+          description: measure.description,
+          text:        measure.text,
+          result:      measure.result
+        },
+        relationships: {
+          election: a_kind_of(Hash),
+          comments: a_kind_of(Hash)
+        }
       )
-
-      expect(json['data']['attributes']['title']).to       eq(measure.title)
-      expect(json['data']['attributes']['description']).to eq(measure.description)
-      expect(json['data']['attributes']['text']).to        eq(measure.text)
-      expect(json['data']['attributes']['result']).to      eq(measure.result)
     end
   end
 end

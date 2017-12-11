@@ -15,43 +15,47 @@
 require 'rails_helper'
 
 RSpec.describe CommentSerializer, type: :serializer do
-  describe "attributes" do
-    context 'for comments on measures' do
-      let(:comment) { FactoryBot.create(:measure_comment) }
-      let(:json)    { JSON.parse(serialize(comment)) }
+  let(:json) { JSON.parse(serialize(comment), symbolize_names: true) }
 
-      it 'serializes the correct attributes' do
-        expect(json['data']['attributes'].keys).to contain_exactly(
-          'text',
-          'commentable-id',
-          'commentable-type',
-          'measure-start',
-          'measure-end'
-        )
+  context 'for comments on measures' do
+    let(:comment) { FactoryBot.create(:measure_comment) }
 
-        expect(json['data']['attributes']['text']).to             eq(comment.text)
-        expect(json['data']['attributes']['commentable-id']).to   eq(comment.commentable_id)
-        expect(json['data']['attributes']['commentable-type']).to eq(comment.commentable_type)
-        expect(json['data']['attributes']['measure-start']).to    eq(comment.measure_start)
-        expect(json['data']['attributes']['measure-end']).to      eq(comment.measure_end)
-      end
+    it 'serializes the data correctly' do
+      expect(json[:data]).to match(
+        id:         comment.id.to_s,
+        type:       'comments',
+        attributes: {
+          text:               comment.text,
+          'commentable-id':   comment.commentable_id,
+          'commentable-type': comment.commentable_type,
+          'measure-start':    comment.measure_start,
+          'measure-end':      comment.measure_end
+        },
+        relationships: {
+          user:     a_kind_of(Hash),
+          comments: a_kind_of(Hash)
+        }
+      )
     end
+  end
 
-    context 'for comments on comments' do
-      let(:comment) { FactoryBot.create(:comment_comment) }
-      let(:json)    { JSON.parse(serialize(comment)) }
+  context 'for comments on comments' do
+    let(:comment) { FactoryBot.create(:comment_comment) }
 
-      it 'serializes the correct attributes' do
-        expect(json['data']['attributes'].keys).to contain_exactly(
-          'text',
-          'commentable-id',
-          'commentable-type'
-        )
-
-        expect(json['data']['attributes']['text']).to             eq(comment.text)
-        expect(json['data']['attributes']['commentable-id']).to   eq(comment.commentable_id)
-        expect(json['data']['attributes']['commentable-type']).to eq(comment.commentable_type)
-      end
+    it 'serializes the data correctly' do
+      expect(json[:data]).to match(
+        id:         comment.id.to_s,
+        type:       'comments',
+        attributes: {
+          text:               comment.text,
+          'commentable-id':   comment.commentable_id,
+          'commentable-type': comment.commentable_type
+        },
+        relationships: {
+          user:     a_kind_of(Hash),
+          comments: a_kind_of(Hash)
+        }
+      )
     end
   end
 end
