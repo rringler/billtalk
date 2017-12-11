@@ -26,7 +26,8 @@ class Api::V1::ElectionsController < Api::V1::BaseController
   def election_params
     params.require(:election).permit(
       :state_id,
-      :date
+      :date,
+      :name
     )
   end
 end
