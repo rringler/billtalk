@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FETCH_MEASURE, FETCH_MEASURES } from '../types';
+import { FETCH_MEASURE, FETCH_MEASURES } from 'types';
 
 export default function(state = {}, action) {
   switch (action.type) {

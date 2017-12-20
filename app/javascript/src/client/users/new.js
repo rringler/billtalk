@@ -4,7 +4,7 @@ import { Button, Col, ControlLabel, Form, FormControl, FormGroup, HelpBlock } fr
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createUser } from './actions';
-import { emailRegex } from '../validations';
+import { emailRegex } from 'validations';
 
 class SignUp extends Component {
   onSubmit = (values) => {

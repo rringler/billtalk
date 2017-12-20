@@ -2,10 +2,10 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { Button, Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
-import CloseableAlert from '../lib/closeable_alert';
+import CloseableAlert from 'lib/closeable_alert';
 import { connect } from 'react-redux';
 import { createSession } from './actions';
-import { emailRegex } from '../validations';
+import { emailRegex } from 'validations';
 import './new_compact.scss';
 
 class SessionsNewCompact extends Component {

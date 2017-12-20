@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { CREATE_SESSION, DESTROY_SESSION, CREATE_USER } from '../types';
+import { CREATE_SESSION, DESTROY_SESSION, CREATE_USER } from 'types';
 
 export default function(state = {}, action) {
   switch (action.type) {

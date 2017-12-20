@@ -2,10 +2,10 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { Alert, Button, Col, ControlLabel, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
-import ClosableAlert from '../lib/closeable_alert';
+import ClosableAlert from 'lib/closeable_alert';
 import { connect } from 'react-redux';
 import { createSession } from './actions';
-import { emailRegex } from '../validations';
+import { emailRegex } from 'validations';
 
 class SessionsNew extends Component {
   onSubmit = (values) => {

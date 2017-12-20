@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_MEASURE, FETCH_MEASURES } from '../types';
+import { FETCH_MEASURE, FETCH_MEASURES } from 'types';
 
 export function fetchMeasure(id) {
   const url     = `/api/v1/measures/${id}`;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_STATE, FETCH_STATES } from '../types';
+import { FETCH_STATE, FETCH_STATES } from 'types';
 
 export function fetchState(id) {
   const url     = `/api/v1/states/${id}`;

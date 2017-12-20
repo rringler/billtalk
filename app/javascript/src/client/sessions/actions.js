@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CREATE_SESSION, DESTROY_SESSION } from '../types';
+import { CREATE_SESSION, DESTROY_SESSION } from 'types';
 
 export function createSession({ email, password }) {
   const url  = '/api/v1/sessions';

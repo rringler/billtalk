@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_ELECTION, FETCH_ELECTIONS } from '../types';
+import { FETCH_ELECTION, FETCH_ELECTIONS } from 'types';
 
 export function fetchElection(id) {
   const url     = `/api/v1/elections/${id}`;

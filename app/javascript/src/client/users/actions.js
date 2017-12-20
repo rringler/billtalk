@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CREATE_USER } from '../types';
+import { CREATE_USER } from 'types';
 
 export function createUser({ email, password, tos }) {
   const url  = '/api/v1/users';
