@@ -1,18 +1,15 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { AuthToken } from './User/reducers';
-import { Election } from './Elections/Election/reducers';
-import { Measure } from './Measures/Measure/reducers';
-import { States } from './States/States/reducers';
-import { State } from './States/State/reducers';
 
-const rootReducer = combineReducers({
+import electionsReducer from './elections/reducers';
+import measuresReducer  from './measures/reducers';
+import sessionReducer   from './sessions/reducers';
+import statesReducer    from './states/reducers';
+
+export default combineReducers({
   form:      formReducer,
-  authToken: AuthToken,
-  election:  Election,
-  measure:   Measure,
-  states:    States,
-  state:     State
+  session:   sessionReducer,
+  elections: electionsReducer,
+  measures:  measuresReducer,
+  states:    statesReducer,
 });
-
-export default rootReducer;

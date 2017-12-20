@@ -3,14 +3,14 @@ import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import LoggedInMenuItems from './LoggedInMenuItems';
-import LoggedOutMenuItems from './LoggedOutMenuItems';
+import LoggedInMenuItems from './logged_in_menu_items';
+import LoggedOutMenuItems from './logged_out_menu_items';
 
 class Header extends Component {
   renderConditionalMenuItems = (eventKey) => {
-    const { authToken } = this.props;
+    const { token } = this.props;
 
-    if (authToken) {
+    if (token) {
       return (<LoggedInMenuItems eventKey={eventKey} />);
     } else {
       return (<LoggedOutMenuItems eventKey={eventKey} />);
@@ -39,8 +39,8 @@ class Header extends Component {
   }
 }
 
-function mapStateToProps({ authToken }) {
-  return { authToken };
+function mapStateToProps({ session: { token } }) {
+  return { token };
 }
 
 export default connect(mapStateToProps)(Header);
